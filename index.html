@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#05070a" />
+  <title>PENHU — AI ENGINEER · Building the future</title>
+  <meta name="description" content="PENHU AI 個人品牌動態網站：滾動驅動粒子動畫、F1 賽道未來感、AI 工作流。" />
+  <link rel="preload" href="assets/penhu-hero.png" as="image" />
+  <link rel="stylesheet" href="styles.css?v=42" />
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Top scroll progress bar -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <!-- Custom cursor (hidden on touch devices) -->
+  <div class="cursor cursor--dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor cursor--ring" id="cursorRing" aria-hidden="true"></div>
+
+  <!-- Background video — fades in once the user scrolls past the about headline -->
+  <div class="bg-video-wrap" id="bgVideoWrap" aria-hidden="true">
+    <video class="bg-video" id="bgVideo" autoplay muted loop playsinline preload="auto">
+      <source src="assets/scene-bg.mp4" type="video/mp4" />
+    </video>
+    <div class="bg-video__tint"></div>
+  </div>
+
+  <header class="topbar">
+    <a class="topbar__brand" href="#top">
+      <span class="dot"></span>PENHU
+    </a>
+    <nav class="topbar__nav" aria-label="Primary">
+      <a href="#about">講師介紹</a>
+      <a href="#work">課程內容</a>
+      <a href="#contact">現在就報名</a>
+      <a href="#contactCta">聯絡我們</a>
+    </nav>
+    <button class="audio-toggle" id="audioToggle" type="button" aria-pressed="false" aria-label="Toggle background sound">
+      <span class="audio-toggle__bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span class="audio-toggle__label">SOUND OFF</span>
+    </button>
+    <a class="topbar__cta" href="#contact">成為 PENHU 會員</a>
+  </header>
+
+  <main id="top">
+
+    <!-- Pinned hero stage: image stays centered while scroll drives the animation -->
+    <section class="stage" id="stage" aria-label="Hero">
+      <div class="stage__sticky">
+        <canvas class="stage__particles" id="particles" aria-hidden="true"></canvas>
+        <div class="stage__track" id="raceTrack" aria-hidden="true"></div>
+
+        <div class="stage__rings" aria-hidden="true">
+          <span class="ring ring--1"></span>
+          <span class="ring ring--2"></span>
+          <span class="ring ring--3"></span>
+        </div>
+
+        <div class="stage__hero">
+          <div class="stage__photo">
+            <img src="assets/penhu-hero.png" alt="PENHU — AI Engineer 站在 F1 賽道前" />
+            <div class="stage__photo-glow" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <div class="stage__hud" aria-hidden="true">
+          <div class="hud hud--tl">
+            <span class="hud__k">CLASS</span><span class="hud__v">C19</span>
+            <span class="hud__k">MODEL</span><span class="hud__v">TRAINING</span>
+            <span class="hud__k">ACCURACY</span><span class="hud__v">99.7%</span>
+          </div>
+          <div class="hud hud--tr">
+            <span class="hud__k">SECTOR 1</span><span class="hud__v">32.421</span>
+            <span class="hud__k">SECTOR 2</span><span class="hud__v">41.983</span>
+            <span class="hud__k">TOTAL LAP</span><span class="hud__v">1:41.533</span>
+          </div>
+          <div class="hud hud--bl">
+            <span class="hud__k">DATASET</span><span class="hud__v">12.5B TOKENS</span>
+          </div>
+          <div class="hud hud--br">
+            <span class="hud__k">REAL-TIME</span><span class="hud__v">ANALYTICS</span>
+          </div>
+        </div>
+
+        <!-- Sliding copy panels driven by scroll progress -->
+        <div class="stage__copy" id="copyPanels">
+          <article class="panel" data-panel="0">
+            <p class="eyebrow">PENHU · AI ENGINEER</p>
+            <h1>Build your<br/>future</h1>
+            <p class="lead">從現在開始 重寫你的賽道</p>
+          </article>
+          <article class="panel" data-panel="1">
+            <p class="eyebrow">CHAPTER · 01</p>
+            <h1>AI 不是玩具<br/>請拿它來賺錢</h1>
+            <p class="lead">玩 prompt 是娛樂<br/>把 AI 變現才是真本事</p>
+          </article>
+          <article class="panel" data-panel="2">
+            <p class="eyebrow">CHAPTER · 02</p>
+            <h1>就用這次機會</h1>
+            <p class="lead">等下一波 差距就追不上了</p>
+          </article>
+          <article class="panel panel--accel" data-panel="3">
+            <p class="eyebrow">CHAPTER · 03</p>
+            <h1 class="panel__h1--accel">帶你超速<br/>下一個未來</h1>
+            <p class="lead">對的人 用 0 成本就能上車</p>
+          </article>
+        </div>
+
+        <!-- Final scene: zoomed text dissolves into a massive AI lock-up -->
+        <div class="stage__finale" id="stageFinale" aria-hidden="true">
+          <span class="ai-mega">AI</span>
+        </div>
+
+        <div class="stage__progress" aria-hidden="true">
+          <span class="bar"><i id="progressBar"></i></span>
+          <span class="step" id="progressStep">01 / 04</span>
+        </div>
+
+        <div class="stage__cue" aria-hidden="true">
+          <span></span><em>SCROLL</em>
+        </div>
+      </div>
+    </section>
+
+    <!-- Marquee strip after the pinned stage -->
+    <section class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <span>AI WORKFLOW</span><i>✦</i>
+        <span>PROMPT THINKING</span><i>✦</i>
+        <span>AUTOMATION</span><i>✦</i>
+        <span>CONTENT OS</span><i>✦</i>
+        <span>BUILDING THE FUTURE</span><i>✦</i>
+        <span>AI WORKFLOW</span><i>✦</i>
+        <span>PROMPT THINKING</span><i>✦</i>
+        <span>AUTOMATION</span><i>✦</i>
+        <span>CONTENT OS</span><i>✦</i>
+        <span>BUILDING THE FUTURE</span><i>✦</i>
+      </div>
+    </section>
+
+    <section class="about" id="about">
+      <div class="about__inner">
+        <div class="about__why reveal">
+          <p class="about__why-q">為什麼你該聽我說？</p>
+          <p class="about__why-cue">先看我的經歷 ↓</p>
+        </div>
+        <p class="eyebrow about__eyebrow">
+          <span class="about__eyebrow-tag">ABOUT ·</span>
+          <span class="about__eyebrow-name">氣球柯男<em class="about__eyebrow-en">Conan</em></span>
+        </p>
+        <h2 class="reveal about__headline">聽過千萬次的 AI<br/>不如看一次賺千萬的實戰</h2>
+        <div class="about__grid">
+          <div class="about__card reveal">
+            <span>01</span>
+            <h3>工程師經驗</h3>
+            <ul class="about__list">
+              <li>12 歲開始寫程式，做出大量程式與網站</li>
+              <li>16 歲靠寫程式賺進百萬</li>
+              <li>至今橫跨上百種程式開發專案</li>
+            </ul>
+          </div>
+          <div class="about__card reveal">
+            <span>02</span>
+            <h3>Web3 經歷</h3>
+            <ul class="about__list">
+              <li>以精準眼光在 NFT 賺超過數千萬</li>
+              <li>開發多款幣圈工具</li>
+              <li>經營千人交易教學社群</li>
+              <li>入選年度 30 大影響力 KOL</li>
+              <li>幣安、OKX、BingX 等交易所影響力人物</li>
+            </ul>
+          </div>
+          <div class="about__card reveal">
+            <span>03</span>
+            <h3>AI 實戰案例</h3>
+            <ul class="about__list">
+              <li>7 天把影音團隊小白訓練成 AI 工程師</li>
+              <li>結合資深分析師策略，做出 AI 分析師</li>
+              <li>用 AI 加速程式開發節奏</li>
+              <li>靠 AI 最高年收破千萬</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="work" id="work">
+      <div class="work__inner">
+        <p class="eyebrow center">AI · QUESTIONS</p>
+        <div class="work__hero reveal">
+          <span class="work__hero-num" data-countup="04" data-countup-pad="2">0</span>
+          <span class="work__hero-rule"></span>
+          <h2 class="work__hero-h2">你必須知道的事</h2>
+          <span class="work__hero-en">FOUR · ESSENTIALS</span>
+        </div>
+
+        <div class="qa-grid">
+          <article class="qa reveal">
+            <header class="qa__head">
+              <span class="qa__num">01</span>
+              <h3 class="qa__title">為什麼要學 AI</h3>
+            </header>
+            <p class="qa__tagline">不是選擇題，是生存題</p>
+            <div class="qa__body">
+              <p>會用 AI 的人，正在用你十倍的速度在跑。差別不在聰明，是早一步搞清楚這個工具能做什麼。現在學跟一年後學，差距不在同一個量級。</p>
+            </div>
+            <blockquote class="qa__quote">學 AI 最好的時間是三年前，其次是現在。</blockquote>
+          </article>
+
+          <article class="qa reveal">
+            <header class="qa__head">
+              <span class="qa__num">02</span>
+              <h3 class="qa__title">認識 AI 工具全貌</h3>
+            </header>
+            <p class="qa__tagline">選錯工具，努力都是浪費</p>
+            <div class="qa__body">
+              <p>文字、圖像、影片、數據、自動化——AI 工具多到記不住。我幫你把整個版圖攤開，課程結束你帶走一張決策地圖，遇到問題就知道該拿哪把刀。</p>
+            </div>
+            <blockquote class="qa__quote">市場上不缺好工具，缺的是知道怎麼選的人。</blockquote>
+          </article>
+
+          <article class="qa reveal">
+            <header class="qa__head">
+              <span class="qa__num">03</span>
+              <h3 class="qa__title">AI 實戰應用</h3>
+            </header>
+            <p class="qa__tagline">會示範的人很多，能變現的人很少</p>
+            <div class="qa__body">
+              <p>AI 分析師、回測系統、自動內容——我做的每一個都跑出真實數據。用 AI 做到年收破千萬的每一步邏輯，全部拆給你看，套用到你自己的場景。</p>
+            </div>
+            <blockquote class="qa__quote">AI 能幫你做什麼，取決於你敢不敢真的去試。</blockquote>
+          </article>
+
+          <article class="qa reveal">
+            <header class="qa__head">
+              <span class="qa__num">04</span>
+              <h3 class="qa__title">AI 串接與自動化</h3>
+            </header>
+            <p class="qa__tagline">一個人，做到一個團隊的事</p>
+            <div class="qa__body">
+              <p>抓資料、出報告、排程發文、串多個平台——當 AI 接上其他工具，你擁有的不是一個助理，是一條 24 小時的自動化生產線。</p>
+            </div>
+            <blockquote class="qa__quote">自動化不是偷懶，是把精力留給值錢的決策。</blockquote>
+          </article>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="system" id="system">
+      <div class="system__inner">
+        <p class="eyebrow center">JOIN · US</p>
+        <h2 class="center reveal">現在就用 AI 賺錢</h2>
+
+        <div class="manifesto reveal">
+          <!-- 1. Hook — 痛點：別人睡覺時 AI 已經在賺錢 -->
+          <div class="manifesto__block">
+            <p>有人在睡覺，AI 還在盤面上替他們賺錢。<br/>你還在自己盯線、手動下單、看到行情才反應。</p>
+            <p class="manifesto__inner-thought">你心裡想：「他們是怎麼做到的？我也行嗎？」</p>
+            <p class="manifesto__answer">當然，只要你學會把 AI 串接上交易所，<br/>你也可以讓策略 24 小時自己跑。</p>
+          </div>
+
+          <!-- 2. 開場宣告 — 這次給你的 -->
+          <p class="manifesto__lead">
+            <span class="manifesto__lead-small">手把手教你</span>
+            <strong class="manifesto__lead-hero">用 AI 串接交易所</strong>
+          </p>
+
+          <p class="manifesto__nocode">
+            <span class="manifesto__nocode-tag">NO CODE</span>
+            <span>全程用自然語言完成 — 你不用寫一行程式碼。</span>
+          </p>
+
+          <!-- 4. Punch — 真正有料 -->
+          <p class="manifesto__punch">
+            真正有料的人就在這裡<br/>
+            你還要聽外面所謂的講師騙多久？
+          </p>
+
+          <!-- 5. CTA -->
+          <p class="manifesto__urgency">機會只有一次</p>
+          <p class="manifesto__cta">名額有限</p>
+          <p class="manifesto__fineprint">（額滿不增）</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" id="contact">
+      <div class="contact__inner reveal">
+        <p class="eyebrow">JOIN · ENROLLMENT</p>
+        <h2>現在就報名</h2>
+
+        <!-- Main offer: 500U paid course (click to expand registration form) -->
+        <article class="enroll enroll--main reveal" data-enroll="paid">
+          <div class="enroll__head" role="button" tabindex="0" aria-expanded="false" aria-controls="formPaid">
+            <span class="enroll__tag">COURSE · ENROLLMENT</span>
+            <h3>報名課程</h3>
+            <ul class="enroll__list">
+              <li>直接報名</li>
+              <li>立即開始學習</li>
+            </ul>
+            <span class="enroll__price"><span data-countup="500">0</span> U</span>
+            <span class="enroll__cta-hint">點擊報名課程</span>
+            <span class="enroll__chevron" aria-hidden="true">▾</span>
+          </div>
+          <form class="enroll__form" id="formPaid" data-enroll-form="paid" onsubmit="return false;">
+            <fieldset class="ef-event">
+              <legend class="ef-event__tag">場次資訊（僅此一場）</legend>
+              <div class="ef-event__grid">
+                <div class="ef-event__cell"><em>DATE</em><strong>05 / 30</strong></div>
+                <div class="ef-event__cell"><em>TIME</em><strong>13:00</strong></div>
+                <div class="ef-event__cell"><em>CITY</em><strong>台北</strong></div>
+              </div>
+              <p class="ef-event__note">確切地點將於報名確認後以信件通知。</p>
+              <input type="hidden" name="session" value="2026-05-30T13:00 / Taipei" />
+            </fieldset>
+            <div class="ef-row">
+              <label class="ef-field"><span>姓名</span><input type="text" name="name" required autocomplete="name" /></label>
+              <label class="ef-field"><span>綽號</span><input type="text" name="nickname" /></label>
+            </div>
+            <div class="ef-row">
+              <label class="ef-field"><span>電話</span><input type="tel" name="phone" required autocomplete="tel" /></label>
+              <label class="ef-field"><span>信箱</span><input type="email" name="email" required autocomplete="email" /></label>
+            </div>
+            <label class="ef-field"><span>LINE ID</span><input type="text" name="line" autocomplete="off" /></label>
+            <div class="ef-divider"><span>內轉資訊</span></div>
+            <div class="ef-row">
+              <label class="ef-field">
+                <span>BingX UID</span>
+                <input type="text" name="bingxUid" autocomplete="off" />
+                <span class="ef-uid-ref">
+                  內轉帳號：<code>34019394</code>
+                  <button type="button" class="ef-uid-copy" data-copy="34019394">複製</button>
+                </span>
+              </label>
+              <label class="ef-field">
+                <span>OKX UID</span>
+                <input type="text" name="okxUid" autocomplete="off" />
+                <span class="ef-uid-ref">
+                  內轉帳號：<code>436031375330702938</code>
+                  <button type="button" class="ef-uid-copy" data-copy="436031375330702938">複製</button>
+                </span>
+              </label>
+            </div>
+            <label class="ef-field ef-field--file">
+              <span>內轉截圖</span>
+              <input type="file" name="proof" accept="image/*" id="paidProof" />
+              <span class="ef-file-row">
+                <span class="ef-file-btn" data-file-btn="paidProof">選擇圖片</span>
+                <span class="ef-file-name" id="paidProofName">尚未選擇</span>
+              </span>
+            </label>
+            <label class="ef-field">
+              <span>折扣碼（選填）</span>
+              <div class="ef-discount">
+                <input type="text" name="discount" id="paidDiscount" autocomplete="off" placeholder="輸入折扣碼" />
+                <button type="button" class="ef-discount-btn" id="paidDiscountBtn">套用</button>
+              </div>
+              <span class="ef-discount-msg" id="paidDiscountMsg" aria-live="polite"></span>
+            </label>
+            <button class="ef-submit" type="submit">送出報名</button>
+            <p class="ef-success" data-success aria-live="polite"></p>
+          </form>
+        </article>
+
+        <!-- Alternative: alliance member free track -->
+        <div class="enroll-divider"><span>或</span></div>
+
+        <article class="enroll enroll--free reveal" data-enroll="free">
+          <div class="enroll__head" role="button" tabindex="0" aria-expanded="false" aria-controls="formFree">
+            <span class="enroll__tag">PENHU 聯盟 VIP</span>
+            <h3><span class="enroll__h3-accent">VIP 成員</span>報名課程</h3>
+            <ul class="enroll__list">
+              <li>聯盟成員優先開放免費申請名額</li>
+              <li>名額有限，先卡位先贏</li>
+              <li>加入成為聯盟 VIP 成員，優先搶免費名額</li>
+            </ul>
+            <span class="enroll__price">FREE</span>
+            <span class="enroll__cta-hint">點擊 VIP 報名</span>
+            <span class="enroll__chevron" aria-hidden="true">▾</span>
+          </div>
+          <form class="enroll__form" id="formFree" data-enroll-form="free" onsubmit="return false;">
+            <fieldset class="ef-event">
+              <legend class="ef-event__tag">場次資訊（僅此一場）</legend>
+              <div class="ef-event__grid">
+                <div class="ef-event__cell"><em>DATE</em><strong>05 / 30</strong></div>
+                <div class="ef-event__cell"><em>TIME</em><strong>13:00</strong></div>
+                <div class="ef-event__cell"><em>CITY</em><strong>台北</strong></div>
+              </div>
+              <p class="ef-event__note">確切地點將於報名確認後以信件通知。</p>
+              <input type="hidden" name="session" value="2026-05-30T13:00 / Taipei" />
+            </fieldset>
+            <div class="ef-row">
+              <label class="ef-field"><span>姓名</span><input type="text" name="name" required autocomplete="name" /></label>
+              <label class="ef-field"><span>綽號</span><input type="text" name="nickname" /></label>
+            </div>
+            <div class="ef-row">
+              <label class="ef-field"><span>電話</span><input type="tel" name="phone" required autocomplete="tel" /></label>
+              <label class="ef-field"><span>信箱</span><input type="email" name="email" required autocomplete="email" /></label>
+            </div>
+            <label class="ef-field"><span>LINE ID</span><input type="text" name="line" autocomplete="off" /></label>
+            <label class="ef-field">
+              <span>聯盟會員編號</span>
+              <input type="text" name="memberId" required placeholder="例如 PNHU-0001" autocomplete="off" />
+            </label>
+            <button class="ef-submit" type="submit">送出申請</button>
+            <p class="ef-success" data-success aria-live="polite"></p>
+          </form>
+        </article>
+
+        <div class="contact__close">
+          <aside class="vip-pass">
+            <div class="vip-pass__stub">
+              <span class="vip-pass__no">VIP</span>
+              <span class="vip-pass__brand">PENHU<br/>ALLIANCE</span>
+              <span class="vip-pass__status">ACTIVE · 24/7</span>
+            </div>
+            <div class="vip-pass__body">
+              <p class="vip-pass__head">
+                <span class="vip-pass__kicker">聯盟成員專屬權益</span>
+                <span class="vip-pass__title">未來所有活動，優先申請參加。</span>
+              </p>
+              <ol class="vip-pass__perks">
+                <li>
+                  <em>01</em>
+                  <strong>AI 課程 · 進階班</strong>
+                  <span>第一時間通知與保留<b class="vip-pass__hl">『免費』</b>名額</span>
+                </li>
+                <li>
+                  <em>02</em>
+                  <strong>實戰專案 · 講座 · 社群</strong>
+                  <span>所有活動都享優先報名權</span>
+                </li>
+                <li>
+                  <em>03</em>
+                  <strong>AI 交易與自動化工具</strong>
+                  <span>內部成員搶先體驗</span>
+                </li>
+              </ol>
+              <p class="vip-pass__foot">不只是這次，是接下來的每一次。</p>
+            </div>
+          </aside>
+
+          <p class="contact__close-pitch">
+            我認真想找對的人，跟我一起成長。<br/>
+            名額優先保留給<strong>聯盟 VIP 成員</strong>。
+          </p>
+        </div>
+
+        <a class="big-cta big-cta--pulse" id="contactCta" href="#contactCta">
+          <span>CONTACT</span>
+          <em>私訊小幫手 · 成為 <strong class="big-cta__vip">VIP</strong> →</em>
+        </a>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>© 2026 PENHU · AI ENGINEER</span>
+      <span>F1 ENGINE SFX · WIKIMEDIA COMMONS · CC BY-SA 3.0</span>
+      <span>BUILDING THE FUTURE</span>
+    </footer>
+  </main>
+
+  <script src="app.js?v=42"></script>
+</body>
+</html>
