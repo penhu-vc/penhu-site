@@ -1,0 +1,1451 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>鉻金屬字工坊</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&family=Montserrat:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
+<style>
+/* Layout: big preview stage on the left (sticky on desktop), control rail on the right; stacks on phones. */
+:root{
+  --bg:#eceef1; --panel:#ffffff; --fg:#17191d; --muted:#626873; --line:#d6dae0;
+  --accent:#4a5563; --accent-fg:#ffffff; --chip:#f3f4f6; --focus:#2f6fdd;
+  --ui:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --label:"Montserrat","Noto Sans TC",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121417; --panel:#1b1e23; --fg:#e8eaee; --muted:#9aa1ac; --line:#2c3138;
+  --accent:#c9ced6; --accent-fg:#121417; --chip:#23272d; --focus:#79a6f2; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121417; --panel:#1b1e23; --fg:#e8eaee; --muted:#9aa1ac; --line:#2c3138;
+  --accent:#c9ced6; --accent-fg:#121417; --chip:#23272d; --focus:#79a6f2; color-scheme:dark}
+html,body{height:auto}
+body{background:var(--bg);color:var(--fg);font-family:var(--ui);font-size:14px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px}
+.app{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:20px;max-width:1560px;margin:0 auto;align-items:start}
+@media (max-width:900px){.app{grid-template-columns:minmax(0,1fr)}}
+header.top{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
+header.top h1{font-size:20px;margin:0;font-weight:900;letter-spacing:.04em}
+header.top p{margin:0;color:var(--muted);font-size:13px}
+.stage{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);display:flex;flex-direction:column;gap:10px;min-width:0}
+@media (max-width:900px){.stage{position:static}}
+.frame{position:relative;width:100%;aspect-ratio:16/9;max-width:100%;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.frame canvas{width:100%;height:100%;display:block}
+.frame.bg-white{background:#fff}.frame.bg-black{background:#000}.frame.bg-gray{background:#7d8086}
+.frame.bg-check{background:repeating-conic-gradient(#d9d9d9 0 25%,#f4f4f4 0 50%) 0 0/24px 24px}
+.busy{position:absolute;right:10px;bottom:8px;font:500 11px var(--label);color:#888;letter-spacing:.08em}
+textarea{resize:vertical;line-height:1.4;min-height:3.2em}
+.oob{position:absolute;left:10px;top:8px;font-size:12px;font-weight:700;color:#fff;background:#c0392b;border-radius:4px;padding:2px 8px}
+.oob[hidden]{display:none}
+.warn{font-size:12px;color:#b45309;margin:0}
+.warn:empty{display:none}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--panel)}
+.seg button{border:0;background:transparent;color:var(--fg);padding:6px 10px;font:inherit;font-size:12px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg)}
+.btn{border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:6px;padding:8px 12px;font:inherit;font-weight:700;cursor:pointer}
+a.btn{text-decoration:none;display:inline-block}
+.btn.primary{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.btn:disabled{opacity:.5;cursor:default}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.note{color:var(--muted);font-size:12px;margin:0}
+.rail{display:flex;flex-direction:column;gap:12px;min-width:0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.card h2{margin:0;font:600 11px var(--label);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:13px}
+label.c{display:flex;gap:8px;align-items:center;font-size:13px}
+input[type=text],textarea,select{width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:var(--bg);color:var(--fg);font:inherit;font-size:15px}
+.rng{display:grid;grid-template-columns:6em minmax(0,1fr) 3.2em;align-items:center;gap:8px;font-size:13px}
+.rng input{width:100%;accent-color:var(--accent)}
+.rng output{text-align:right;font:500 12px var(--label);font-variant-numeric:tabular-nums;color:var(--muted)}
+.metals{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.metal{border:1px solid var(--line);border-radius:6px;background:var(--chip);padding:6px 4px;cursor:pointer;color:var(--fg);font:inherit;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:4px}
+.metal i{display:block;width:100%;height:22px;border-radius:3px}
+.metal[aria-pressed="true"]{border-color:var(--fg);box-shadow:0 0 0 1px var(--fg)}
+.presets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.preset{border:1px solid var(--line);border-radius:6px;background:var(--chip);padding:8px 4px;cursor:pointer;color:var(--fg);font:inherit;font-size:13px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1.3}
+.preset small{font-weight:400;font-size:11px;color:var(--muted)}
+.preset[aria-pressed="true"]{border-color:var(--fg);box-shadow:0 0 0 1px var(--fg)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.file{font-size:12px;color:var(--muted)}
+.toast{min-height:1.2em;font-size:12px;color:var(--muted)}
+.credit{font-size:11px;color:var(--muted);margin:0}
+.savebox{position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;
+  padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));box-sizing:border-box}
+.savebox[hidden]{display:none}
+.saveinner{background:var(--panel);color:var(--fg);border-radius:10px;padding:16px;width:min(960px,100%);max-height:100%;overflow:auto;display:flex;flex-direction:column;gap:10px;box-sizing:border-box}
+.saveinner p{margin:0}
+.saveimg{background:repeating-conic-gradient(#d9d9d9 0 25%,#f4f4f4 0 50%) 0 0/24px 24px;border:1px solid var(--line);border-radius:6px;display:flex;justify-content:center}
+.saveimg img{display:block;max-width:100%;max-height:62vh;height:auto}
+.savemany{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+.savemany figure{margin:0;background:repeating-conic-gradient(#d9d9d9 0 25%,#f4f4f4 0 50%) 0 0/16px 16px;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.savemany img{display:block;width:100%;height:auto}
+.savemany figcaption{font-size:11px;padding:4px 6px;background:var(--panel);color:var(--muted);overflow-wrap:anywhere}
+.pg{position:absolute;right:10px;top:8px;font:600 12px var(--label);color:#fff;background:rgba(0,0,0,.5);border-radius:4px;padding:2px 8px}
+.pg[hidden]{display:none}
+.items{display:flex;flex-wrap:wrap;gap:6px}
+.item{border:1px solid var(--line);border-radius:999px;background:var(--chip);color:var(--fg);font:inherit;font-size:12px;padding:4px 10px;cursor:pointer;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+body[data-effect="puffy"] .metalOnly{display:none}
+body[data-effect="cal"] .metalOnly:not(.calKeep){display:none}
+body:not([data-effect="cal"]) .calOnly{display:none}
+body:not([data-effect="puffy"]) .puffyOnly{display:none}
+.colors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.colors label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}
+.colors input[type=color]{width:100%;height:30px;border:1px solid var(--line);border-radius:6px;background:var(--bg);padding:2px;box-sizing:border-box}
+.item[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+</style>
+
+<div class="app">
+  <header class="top">
+    <h1>鉻金屬字工坊</h1>
+    <p>打字、選效果和顏色，匯出透明 PNG，拖進 Premiere 就能用。</p>
+  </header>
+
+  <section class="stage" aria-label="預覽">
+    <div class="frame bg-white" id="frame"><canvas id="view" width="1920" height="1080"></canvas><span class="busy" id="busy"></span><span class="oob" id="oob" hidden>有字超出畫面，匯出會被切掉</span><span class="pg" id="pg" hidden></span></div>
+    <div class="bar">
+      <span class="note">預覽底色</span>
+      <div class="seg" id="bgSeg">
+        <button data-bg="white" aria-pressed="true">白</button><button data-bg="gray" aria-pressed="false">灰</button><button data-bg="black" aria-pressed="false">黑</button><button data-bg="check" aria-pressed="false">透明</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>匯出給 Premiere</h2>
+      <div class="row">
+        <button class="btn primary" id="exp1080">匯出 1920×1080 PNG</button>
+        <button class="btn" id="exp4k">匯出 4K PNG</button>
+        <button class="btn" id="expCrop">只匯出字（裁切）</button>
+        <button class="btn" id="expCrop4k">裁切 4K</button>
+      </div>
+      <div class="row">
+        <button class="btn primary" id="expZip">全部打包 ZIP</button>
+        <select id="zipMode" aria-label="ZIP 裡每張圖的格式" style="width:auto"><option value="1080">每張 1920×1080</option><option value="4k">每張 4K</option><option value="crop">每張只有字（裁切）</option><option value="crop4k">每張裁切 4K</option></select>
+      </div>
+      <p class="note">背景透明。整張 1920×1080 匯出的位置已經排好，拖到時間軸最上層就會在畫面正中間。「裁切」只留字和周圍一點空白，方便自己擺位置。上面四個按鈕匯出預覽中的這一張；「全部打包 ZIP」把主標的每一行各做成一張，放進同一個 ZIP。</p>
+      <div class="toast" id="toast" role="status"></div>
+    </div>
+  </section>
+
+  <aside class="rail">
+    <div class="card">
+      <h2>效果</h2>
+      <div class="seg" id="effects" role="group" aria-label="效果"></div>
+      <p class="note metalOnly">金屬字：銀色鉻金屬的斜切面立體字。</p>
+      <p class="note calOnly">書法字：毛筆字配上金屬漸層，像「史上最強 六月季」那種。下面的金屬質感可以換顏色。</p>
+      <p class="note puffyOnly">膨膨字：圓潤膨起、亮面塑膠感的可愛立體字，外面一圈描邊。</p>
+    </div>
+    <div class="card">
+      <h2>文字</h2>
+      <label class="f">主標（一行一張圖，按 Enter 換下一張；同一張要分兩行，在斷開的地方打 |）<textarea id="title" rows="3">排隊經濟</textarea></label>
+      <p class="warn" id="missWarn"></p>
+      <label class="f">副標（第幾行就配第幾張主標，英文或中文都可以，留空就不顯示）<textarea id="sub" rows="2">The Queue Economy</textarea></label>
+      <div class="f" id="itemsWrap" hidden><span class="note">預覽哪一張（點一下切換，或把游標移到那一行）</span><div class="items" id="items"></div></div>
+    </div>
+
+    <div class="card puffyOnly">
+      <h2>膨膨字顏色</h2>
+      <div class="metals" id="pColors"></div>
+      <div class="colors">
+        <label>字身<input type="color" id="pBody"></label>
+        <label>描邊<input type="color" id="pRim"></label>
+        <label>最外細線<input type="color" id="pLine"></label>
+      </div>
+    </div>
+
+    <div class="card puffyOnly">
+      <h2>膨膨字立體感</h2>
+      <div class="rng"><span>筆畫變胖</span><input type="range" id="pGrow" min="0" max="80" value="12"><output for="pGrow"></output></div>
+      <div class="rng"><span>轉角圓度</span><input type="range" id="pRound" min="0" max="80" value="24"><output for="pRound"></output></div>
+      <div class="rng"><span>邊緣圓肩</span><input type="range" id="pShoulder" min="20" max="160" value="75"><output for="pShoulder"></output></div>
+      <div class="rng"><span>表面圓滑</span><input type="range" id="pSmooth" min="0" max="60" value="25"><output for="pSmooth"></output></div>
+      <div class="rng"><span>膨起高度</span><input type="range" id="pPuff" min="20" max="250" value="100"><output for="pPuff"></output></div>
+      <div class="rng"><span>明暗對比</span><input type="range" id="pShade" min="0" max="200" value="100"><output for="pShade"></output></div>
+      <div class="rng"><span>高光亮度</span><input type="range" id="pSpec" min="0" max="150" value="110"><output for="pSpec"></output></div>
+      <div class="rng"><span>高光大小</span><input type="range" id="pGloss" min="0" max="100" value="65"><output for="pGloss"></output></div>
+      <div class="rng"><span>反光板</span><input type="range" id="pRefl" min="0" max="150" value="45"><output for="pRefl"></output></div>
+      <div class="rng"><span>光源角度</span><input type="range" id="pLight" min="0" max="360" value="125"><output for="pLight"></output></div>
+      <div class="rng"><span>描邊粗細</span><input type="range" id="pRimW" min="0" max="60" value="14"><output for="pRimW"></output></div>
+      <div class="rng"><span>描邊陰影</span><input type="range" id="pRimShade" min="0" max="200" value="100"><output for="pRimShade"></output></div>
+      <div class="rng"><span>最外細線</span><input type="range" id="pLineW" min="0" max="20" step="0.5" value="5"><output for="pLineW"></output></div>
+      <div class="rng"><span>投影</span><input type="range" id="pShadow" min="0" max="100" value="30"><output for="pShadow"></output></div>
+      <div class="row"><button class="btn" id="pReset">立體感回到預設</button></div>
+      <p class="note">「筆畫變胖」讓筆畫膨起來、黏成一塊；「邊緣圓肩」越大，邊緣越圓、越像吹氣；「反光板」是從光源對面打回來的柔光，讓暗面邊緣也有一點亮；「描邊陰影」是字身壓在描邊上的影子。</p>
+    </div>
+
+    <div class="card metalOnly">
+      <h2>一鍵套用參考款式</h2>
+      <div class="presets" id="presets"></div>
+      <p class="note">按一下就套用那張參考圖的字型、斜度、字寬、字距和切面風格。文字和金屬顏色不會變。</p>
+    </div>
+
+    <div class="card metalOnly calKeep">
+      <h2>金屬質感</h2>
+      <div class="metals" id="metals"></div>
+    </div>
+
+    <div class="card">
+      <h2>主標字型與形狀</h2>
+      <label class="f">主標字型<select id="tFont"></select></label>
+      <p class="note metalOnly">「直條切角體」的筆畫是直條加平切，最接近參考圖。哪個字看起來怪，就換成「刀削粗黑體」，兩套粗細相同。</p>
+      <div class="row"><label class="btn" for="upT" style="font-weight:500">上傳自己的字型</label><input type="file" id="upT" accept=".ttf,.otf,.ttc,.woff,.woff2" hidden><span class="file" id="upTName"></span></div>
+      <div class="rng"><span>斜度</span><input type="range" id="skew" min="-5" max="25" step="0.5" value="12"><output for="skew"></output></div>
+      <div class="rng"><span>字寬</span><input type="range" id="hscale" min="60" max="140" value="86"><output for="hscale"></output></div>
+      <div class="rng metalOnly"><span>直筆加粗</span><input type="range" id="growX" min="0" max="45" value="0"><output for="growX"></output></div>
+      <div class="rng metalOnly"><span>橫筆加粗</span><input type="range" id="growY" min="0" max="25" value="0"><output for="growY"></output></div>
+      <label class="c metalOnly"><input type="checkbox" id="autoGap" checked>自動留住筆畫之間的縫，筆畫多的字不會糊掉</label>
+      <div class="rng"><span>主標大小</span><input type="range" id="tSize" min="80" max="520" value="350"><output for="tSize"></output></div>
+      <div class="rng"><span>主標字距</span><input type="range" id="tTrack" min="-20" max="80" value="16"><output for="tTrack"></output></div>
+      <label class="c"><input type="checkbox" id="autoFit" checked>字太多時自動縮小，不超出畫面</label>
+    </div>
+
+    <div class="card calOnly">
+      <h2>書法字</h2>
+      <label class="f">字裡面填<select id="cFill"><option value="grad">金屬漸層（照上面選的金屬）</option><option value="image">上傳的圖片</option></select></label>
+      <div class="row"><label class="btn" for="upC" style="font-weight:500">上傳圖片填進字裡</label><input type="file" id="upC" accept="image/*" hidden><span class="file" id="upCName"></span></div>
+      <div class="rng"><span>筆畫加粗</span><input type="range" id="cBold" min="0" max="40" value="5"><output for="cBold"></output></div>
+      <div class="rng"><span>亮度</span><input type="range" id="cLight" min="-100" max="100" value="0"><output for="cLight"></output></div>
+      <div class="rng"><span>上下明暗差</span><input type="range" id="cContrast" min="0" max="200" value="100"><output for="cContrast"></output></div>
+      <div class="rng"><span>光澤</span><input type="range" id="cSheen" min="0" max="100" value="30"><output for="cSheen"></output></div>
+      <div class="rng"><span>邊緣暗線</span><input type="range" id="cRim" min="0" max="100" value="35"><output for="cRim"></output></div>
+      <div class="rng"><span>邊緣柔化</span><input type="range" id="cEdge" min="0" max="100" value="40"><output for="cEdge"></output></div>
+      <div class="rng"><span>不透明度</span><input type="range" id="cOpacity" min="40" max="100" value="92"><output for="cOpacity"></output></div>
+      <div class="rng"><span>暗色光暈</span><input type="range" id="cGlow" min="0" max="100" value="45"><output for="cGlow"></output></div>
+      <div class="row"><button class="btn" id="cReset">書法字回到預設</button></div>
+      <p class="note">參考圖的字有一點半透明，壓在膚色上的地方會透出暖色。不透明度 92 匯出的 PNG 本身就是半透明的，放進 Premiere 會自然吃到後面畫面的顏色；要純白不透就拉到 100。暗色光暈讓字在亮的畫面上也看得清楚。字型「莫大毛筆」改造自青柳衡山的衡山毛筆フォント，SIL OFL 1.1，可商用。</p>
+    </div>
+
+    <div class="card metalOnly">
+      <h2>斜切面與光澤</h2>
+      <div class="row"><span class="note">風格</span><div class="seg" id="styles"></div></div>
+      <div class="rng"><span>斜切寬度</span><input type="range" id="bevel" min="50" max="150" value="100"><output for="bevel"></output></div>
+      <div class="rng"><span>柔邊</span><input type="range" id="soft" min="0.3" max="3" step="0.1" value="0.9"><output for="soft"></output></div>
+      <div class="rng"><span>明暗對比</span><input type="range" id="contrast" min="40" max="140" value="100"><output for="contrast"></output></div>
+      <div class="rng"><span>光源角度</span><input type="range" id="light" min="0" max="360" value="100"><output for="light"></output></div>
+      <div class="rng"><span>邊線粗細</span><input type="range" id="outline" min="0" max="8" step="0.1" value="1.2"><output for="outline"></output></div>
+      <div class="rng"><span>稜線亮度</span><input type="range" id="ridge" min="0" max="150" value="30"><output for="ridge"></output></div>
+      <div class="rng"><span>金屬紋理</span><input type="range" id="mottle" min="0" max="250" value="100"><output for="mottle"></output></div>
+      <div class="rng"><span>投影</span><input type="range" id="shadow" min="0" max="100" value="0"><output for="shadow"></output></div>
+      <p class="note">三種風格的明暗都是照參考圖量出來的：「柔光鉻」是「排隊經濟」那種，筆畫頂面微微隆起，沿著筆畫有拋光鉻面的反光；「平頂鉻」是「柯男大調查」那種，反光比較收斂；「硬切面」是「法律」那種，每個斜面從邊一路切到中間的稜線，輪廓比較粗。斜切寬度、對比和紋理在 100 的時候就是參考圖的樣子。</p>
+    </div>
+
+    <div class="card">
+      <h2>副標</h2>
+      <label class="f">副標字型<select id="sFont"></select></label>
+      <div class="row"><label class="btn" for="upS" style="font-weight:500">上傳副標字型</label><input type="file" id="upS" accept=".ttf,.otf,.ttc,.woff,.woff2" hidden><span class="file" id="upSName"></span></div>
+      <div class="rng"><span>副標大小</span><input type="range" id="sSize" min="32" max="160" value="58"><output for="sSize"></output></div>
+      <div class="rng"><span>副標字距</span><input type="range" id="sTrack" min="0" max="120" value="48"><output for="sTrack"></output></div>
+      <div class="rng"><span>副標字寬</span><input type="range" id="sWide" min="80" max="150" value="118"><output for="sWide"></output></div>
+      <div class="rng"><span>副標加粗</span><input type="range" id="sBold" min="0" max="50" value="22"><output for="sBold"></output></div>
+      <div class="rng"><span>上下間距</span><input type="range" id="gap" min="0" max="260" value="96"><output for="gap"></output></div>
+      <div class="rng"><span>整體位置</span><input type="range" id="yOff" min="-400" max="400" value="0"><output for="yOff"></output></div>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <button class="btn" id="save">記住這組設定</button>
+        <button class="btn" id="reset">回到預設</button>
+      </div>
+      <p class="note">設定只存在這台電腦的瀏覽器裡。上傳的字型每次開啟要重新上傳。</p>
+      <p class="credit">內建主標字型都是開源字型的改造版，依 SIL OFL 1.1 授權：「直條切角體」（Chisel Bar TC Heavy、Ultra）、「刀削粗黑體」和「刀削特黑體」（Chisel Gothic TC Heavy、Ultra）改造自 Noto Sans TC，「刀削窄黑體」（Chisel Hei TC）改造自 WDXL Lubrifont TC。副標預設字型為 DejaVu Sans。</p>
+    </div>
+  </aside>
+</div>
+<div class="savebox" id="saveBox" hidden role="dialog" aria-modal="true" aria-labelledby="saveHead">
+  <div class="saveinner">
+    <p id="saveHead"><b>在圖片上按右鍵，選「另存圖片」</b>，就能存成透明背景的 PNG（手機請長按圖片）。</p>
+    <p class="note" id="saveName"></p>
+    <div class="saveimg" id="saveImgBox"><img id="saveImg" alt="匯出的標題圖片"></div>
+    <div class="row"><a class="btn primary" id="saveZip" hidden>下載 ZIP</a></div>
+    <div class="savemany" id="saveMany" hidden></div>
+    <div class="row"><button class="btn primary" id="saveClose">關閉</button></div>
+  </div>
+</div>
+
+<script>
+/* shading tables measured on the reference titles (build/mktable2.py): tone by the direction a facet faces
+   (16 rows, every 22.5 degrees counter-clockwise from "facing right") and by depth below the outline (nd columns,
+   0..dmax typical half stroke widths). */
+const TABLES={
+  soft:{nd:40,dmax:1.5,flat:0.716,yg:[0.030,0.039,-0.012,-0.029,-0.004,0.011,0.060,0.123,0.153,0.142,0.130,0.086,0.032,0.018,0.017,0.010],ygt:0.085,ygq:-0.227,
+    t:[.090,.098,.113,.130,.147,.166,.187,.207,.227,.248,.271,.294,.315,.339,.364,.374,.382,.392,.404,.420,.439,.603,.627,.635,.641,.646,.650,.655,.667,.679,.692,.698,.698,.698,.698,.698,.698,.698,.698,.698,
+       .149,.162,.189,.220,.257,.271,.288,.309,.336,.373,.426,.933,.953,.933,.919,.907,.894,.873,.816,.785,.779,.764,.739,.718,.701,.694,.694,.695,.696,.697,.697,.698,.698,.698,.698,.698,.698,.698,.698,.698,
+       .430,.449,.487,.536,.594,.674,.774,.841,.877,.899,.910,.933,.970,.984,.990,.992,.995,.999,.993,.853,.837,.826,.818,.811,.805,.798,.780,.762,.743,.725,.707,.698,.698,.698,.698,.698,.698,.698,.698,.698,
+       .747,.759,.781,.808,.838,.880,.934,.969,.987,.991,.981,.976,.976,.975,.975,.975,.974,.974,.963,.781,.758,.748,.741,.735,.732,.729,.724,.718,.712,.706,.701,.698,.698,.698,.698,.698,.698,.698,.698,.698,
+       .842,.849,.863,.877,.891,.908,.927,.950,.974,.990,.997,1,1,1,.998,.994,.990,.983,.953,.705,.687,.685,.684,.682,.682,.683,.686,.688,.691,.694,.696,.698,.698,.698,.698,.698,.698,.698,.698,.698,
+       .703,.710,.723,.736,.748,.763,.781,.809,.847,.880,.906,.921,.926,.929,.932,.933,.934,.935,.937,.939,.927,.748,.743,.738,.734,.731,.728,.725,.717,.709,.702,.698,.698,.698,.698,.698,.698,.698,.698,.698,
+       .943,.927,.895,.860,.821,.783,.745,.724,.721,.720,.722,.725,.729,.734,.742,.945,.936,.913,.896,.882,.872,.865,.847,.829,.813,.795,.777,.760,.742,.724,.706,.698,.698,.698,.698,.698,.698,.698,.698,.698,
+       .919,.908,.886,.862,.837,.813,.793,.786,.793,.804,.820,.836,.850,.875,.911,.924,.934,.945,.958,.975,.956,.755,.751,.745,.740,.737,.733,.730,.721,.711,.702,.698,.698,.698,.698,.698,.698,.698,.698,.698,
+       .562,.566,.574,.582,.590,.598,.607,.618,.632,.637,.641,.645,.649,.656,.667,.786,.757,.745,.736,.728,.721,.713,.690,.688,.707,.715,.711,.708,.705,.702,.699,.698,.698,.698,.698,.698,.698,.698,.698,.698,
+       .295,.303,.320,.337,.353,.369,.382,.394,.405,.415,.424,.437,.452,.457,.466,.478,.493,.514,.533,.779,.792,.787,.783,.780,.777,.772,.758,.745,.731,.718,.704,.698,.698,.698,.698,.698,.698,.698,.698,.698,
+       .107,.119,.144,.153,.163,.176,.193,.215,.289,.547,.571,.579,.585,.590,.592,.591,.589,.598,.618,.646,.684,.721,.756,.769,.759,.749,.740,.731,.721,.712,.702,.698,.698,.698,.698,.698,.698,.698,.698,.698,
+       .000,.007,.020,.025,.033,.047,.063,.085,.141,.387,.412,.420,.425,.430,.433,.435,.440,.443,.445,.445,.442,.441,.442,.467,.515,.552,.579,.605,.632,.658,.684,.698,.698,.698,.698,.698,.698,.698,.698,.698,
+       .034,.043,.061,.079,.098,.114,.129,.140,.148,.158,.169,.181,.194,.204,.213,.223,.235,.246,.255,.258,.255,.246,.236,.221,.228,.635,.659,.674,.684,.693,.698,.698,.698,.698,.698,.698,.698,.698,.698,.698,
+       .030,.039,.058,.077,.096,.112,.126,.135,.141,.147,.154,.162,.173,.182,.192,.202,.212,.223,.233,.237,.238,.236,.233,.230,.222,.568,.619,.648,.670,.688,.698,.698,.698,.698,.698,.698,.698,.698,.698,.698,
+       .029,.038,.056,.075,.095,.112,.128,.140,.148,.160,.176,.193,.211,.228,.242,.255,.268,.278,.285,.287,.291,.298,.305,.315,.338,.586,.630,.655,.674,.689,.698,.698,.698,.698,.698,.698,.698,.698,.698,.698,
+       .082,.089,.101,.114,.126,.137,.147,.158,.170,.181,.192,.202,.211,.215,.219,.226,.234,.246,.279,.503,.535,.565,.587,.605,.617,.622,.636,.649,.663,.677,.691,.698,.698,.698,.698,.698,.698,.698,.698,.698]},
+  flat:{nd:40,dmax:1.5,flat:0.509,yg:[0.027,0.012,0.018,0.055,0.064,0.068,0.118,0.165,0.184,0.200,0.160,0.064,0.037,0.028,0.044,0.045],ygt:0.05,ygq:0.052,
+    t:[.176,.180,.189,.198,.207,.216,.225,.234,.243,.253,.266,.284,.307,.331,.357,.381,.404,.425,.446,.462,.475,.484,.489,.504,.529,.541,.541,.541,.541,.541,.541,.541,.541,.541,.541,.541,.541,.541,.541,.541,
+       .239,.245,.258,.271,.285,.298,.311,.324,.337,.352,.370,.376,.383,.392,.403,.417,.440,.594,.609,.595,.585,.577,.572,.573,.575,.574,.568,.562,.556,.550,.544,.541,.541,.541,.541,.541,.541,.541,.541,.541,
+       .406,.413,.425,.437,.450,.454,.459,.463,.470,.478,.492,.672,.682,.686,.690,.693,.696,.702,.717,.722,.716,.713,.712,.698,.672,.649,.630,.610,.590,.570,.550,.541,.541,.541,.541,.541,.541,.541,.541,.541,
+       .761,.765,.773,.780,.788,.795,.803,.811,.818,.826,.835,.842,.847,.850,.850,.841,.821,.813,.804,.790,.773,.751,.713,.520,.525,.527,.530,.531,.533,.534,.538,.541,.541,.541,.541,.541,.541,.541,.541,.541,
+       .878,.877,.876,.875,.874,.873,.872,.871,.869,.868,.867,.871,.880,.883,.885,.887,.889,.892,.864,.583,.549,.528,.512,.499,.493,.496,.504,.512,.520,.528,.537,.541,.541,.541,.541,.541,.541,.541,.541,.541,
+       .783,.788,.797,.807,.816,.826,.836,.845,.855,.861,.864,.866,.869,.870,.871,.870,.870,.869,.850,.613,.578,.566,.557,.549,.545,.545,.544,.543,.543,.542,.541,.541,.541,.541,.541,.541,.541,.541,.541,.541,
+       .723,.728,.738,.749,.759,.770,.780,.791,.801,.812,.825,.834,.838,.842,.846,.847,.847,.838,.820,.798,.773,.763,.756,.748,.738,.725,.709,.564,.541,.541,.541,.541,.541,.541,.541,.541,.541,.541,.541,.541,
+       .746,.745,.743,.742,.740,.738,.736,.735,.733,.734,.736,.742,.751,.764,.781,.797,.811,.816,.815,.810,.804,.796,.774,.627,.607,.595,.587,.580,.574,.567,.549,.541,.541,.541,.541,.541,.541,.541,.541,.541,
+       .759,.757,.754,.750,.747,.743,.740,.737,.733,.732,.733,.738,.747,.759,.774,.780,.776,.775,.772,.767,.761,.753,.725,.551,.549,.547,.546,.545,.545,.544,.542,.541,.541,.541,.541,.541,.541,.541,.541,.541,
+       .593,.594,.596,.598,.600,.602,.605,.607,.609,.618,.633,.646,.655,.668,.684,.703,.725,.746,.765,.773,.772,.767,.761,.752,.744,.607,.581,.566,.555,.545,.541,.541,.541,.541,.541,.541,.541,.541,.541,.541,
+       .521,.524,.530,.535,.541,.547,.553,.558,.564,.579,.602,.618,.627,.637,.646,.663,.689,.710,.725,.727,.715,.711,.711,.715,.721,.728,.719,.566,.541,.541,.541,.541,.541,.541,.541,.541,.541,.541,.541,.541,
+       .174,.178,.186,.194,.202,.210,.218,.227,.235,.244,.253,.265,.279,.293,.307,.323,.343,.365,.390,.414,.437,.459,.478,.498,.521,.533,.534,.536,.537,.539,.540,.541,.541,.541,.541,.541,.541,.541,.541,.541,
+       .119,.122,.128,.134,.140,.146,.152,.158,.163,.170,.177,.180,.184,.189,.195,.204,.225,.372,.387,.384,.382,.380,.381,.386,.401,.419,.441,.463,.485,.507,.530,.541,.541,.541,.541,.541,.541,.541,.541,.541,
+       .125,.128,.134,.141,.147,.153,.160,.166,.172,.179,.187,.196,.207,.220,.234,.249,.266,.284,.303,.323,.342,.354,.357,.358,.360,.364,.368,.374,.401,.541,.541,.541,.541,.541,.541,.541,.541,.541,.541,.541,
+       .191,.192,.194,.196,.199,.201,.203,.206,.208,.212,.219,.227,.237,.246,.253,.265,.282,.300,.321,.340,.357,.368,.374,.380,.387,.403,.428,.453,.478,.503,.528,.541,.541,.541,.541,.541,.541,.541,.541,.541,
+       .172,.174,.179,.184,.189,.194,.199,.204,.209,.217,.229,.243,.258,.274,.291,.310,.331,.351,.370,.386,.400,.411,.419,.432,.450,.466,.479,.493,.507,.520,.534,.541,.541,.541,.541,.541,.541,.541,.541,.541]},
+  hard:{nd:40,dmax:1.5,flat:0.464,yg:[0.029,-0.020,-0.021,0.026,0.030,0.037,0.038,0.054,0.067,0.037,-0.008,-0.006,0.004,0.016,0.049,0.059],ygt:0.015,ygq:0.061,
+    t:[.308,.308,.284,.284,.284,.284,.400,.400,.473,.473,.425,.425,.441,.441,.453,.453,.448,.448,.447,.447,.466,.466,.497,.497,.512,.512,.512,.512,.512,.512,.512,.512,.512,.512,.512,.512,.512,.512,.512,.512,
+       .554,.554,.443,.443,.443,.443,.560,.560,.623,.623,.608,.608,.629,.629,.633,.633,.647,.647,.682,.682,.745,.745,.908,.908,.731,.731,.731,.731,.731,.731,.731,.731,.731,.731,.731,.731,.731,.731,.731,.731,
+       .959,.959,.742,.742,.649,.649,.794,.794,.905,.905,.904,.904,.912,.912,.914,.914,.937,.937,.952,.952,.997,.997,1,1,.909,.909,.909,.909,.909,.909,.909,.909,.909,.909,.909,.909,.909,.909,.909,.909,
+       1,1,.868,.868,.766,.766,.878,.878,.952,.952,.921,.921,.917,.917,.915,.915,.925,.925,.943,.943,.961,.961,.965,.965,.960,.960,.960,.960,.960,.960,.960,.960,.960,.960,.960,.960,.960,.960,.960,.960,
+       1,1,.865,.865,.797,.797,.878,.878,.903,.903,.880,.880,.885,.885,.879,.879,.881,.881,.925,.925,.927,.927,.917,.917,.973,.973,.973,.973,.973,.973,.973,.973,.973,.973,.973,.973,.973,.973,.973,.973,
+       1,1,.932,.932,.809,.809,.900,.900,.961,.961,.932,.932,.927,.927,.906,.906,.902,.902,.914,.914,.931,.931,.924,.924,.955,.955,.955,.955,.955,.955,.955,.955,.955,.955,.955,.955,.955,.955,.955,.955,
+       1,1,.810,.810,.687,.687,.833,.833,.946,.946,.909,.909,.894,.894,.881,.881,.877,.877,.869,.869,.878,.878,.924,.924,.898,.898,.898,.898,.898,.898,.898,.898,.898,.898,.898,.898,.898,.898,.898,.898,
+       .817,.817,.631,.631,.574,.574,.719,.719,.777,.777,.734,.734,.733,.733,.721,.721,.712,.712,.718,.718,.734,.734,.767,.767,.754,.754,.754,.754,.754,.754,.754,.754,.754,.754,.754,.754,.754,.754,.754,.754,
+       .652,.652,.530,.530,.492,.492,.581,.581,.607,.607,.575,.575,.591,.591,.613,.613,.624,.624,.633,.633,.611,.611,.544,.544,.651,.651,.651,.651,.651,.651,.651,.651,.651,.651,.651,.651,.651,.651,.651,.651,
+       .473,.473,.394,.394,.362,.362,.418,.418,.451,.451,.438,.438,.440,.440,.442,.442,.441,.441,.430,.430,.357,.357,.259,.259,.481,.481,.481,.481,.481,.481,.481,.481,.481,.481,.481,.481,.481,.481,.481,.481,
+       .337,.337,.286,.286,.278,.278,.344,.344,.389,.389,.376,.376,.364,.364,.367,.367,.341,.341,.265,.265,.175,.175,.142,.142,.385,.385,.385,.385,.385,.385,.385,.385,.385,.385,.385,.385,.385,.385,.385,.385,
+       .056,.056,.084,.084,.086,.086,.174,.174,.220,.220,.220,.220,.237,.237,.248,.248,.243,.243,.213,.213,.185,.185,.154,.154,.280,.280,.280,.280,.280,.280,.280,.280,.280,.280,.280,.280,.280,.280,.280,.280,
+       .041,.041,.057,.057,.064,.064,.166,.166,.210,.210,.206,.206,.207,.207,.205,.205,.204,.204,.201,.201,.202,.202,.200,.200,.237,.237,.237,.237,.237,.237,.237,.237,.237,.237,.237,.237,.237,.237,.237,.237,
+       .051,.051,.071,.071,.072,.072,.161,.161,.215,.215,.215,.215,.215,.215,.213,.213,.212,.212,.200,.200,.188,.188,.153,.153,.253,.253,.253,.253,.253,.253,.253,.253,.253,.253,.253,.253,.253,.253,.253,.253,
+       .149,.149,.149,.149,.149,.149,.237,.237,.328,.328,.316,.316,.304,.304,.301,.301,.290,.290,.283,.283,.262,.262,.190,.190,.325,.325,.325,.325,.325,.325,.325,.325,.325,.325,.325,.325,.325,.325,.325,.325,
+       .175,.175,.175,.175,.175,.175,.293,.293,.384,.384,.351,.351,.356,.356,.363,.363,.359,.359,.364,.364,.367,.367,.311,.311,.395,.395,.395,.395,.395,.395,.395,.395,.395,.395,.395,.395,.395,.395,.395,.395]}
+};
+(function(){
+"use strict";
+const W=1920,H=1080;
+const $=id=>document.getElementById(id);
+const hex=h=>{h=h.replace('#','');return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)]};
+
+/* ---------- metal presets ----------
+   ramp: tone 0..1 (0 = facet turned away from the light, 1 = facet facing it) -> colour.
+   face: optional separate ramp for the flat top; faceTone: tone of the flat top; out: outline colours (dark side, lit side). */
+const METALS={
+  silver:{name:"銀色鉻金屬",ramp:[[0,"#0e0f11"],[1,"#fbfcfd"]],out:["#131417","#74777c"]},
+  blackgold:{name:"黑金",ramp:[[0,"#2a1803"],[.3,"#7a5214"],[.6,"#cf9d3b"],[.85,"#f8dc93"],[1,"#fff7df"]],face:[[0,"#060504"],[.6,"#1b1814"],[1,"#5a5145"]],out:["#080502","#5b3f10"],faceTone:.55,bevelMul:.5},
+  gold:{name:"金色",ramp:[[0,"#2e1c05"],[.25,"#7a5215"],[.5,"#c79a3e"],[.75,"#edd07a"],[1,"#fffadf"]],out:["#1a0f02","#8a6420"],faceTone:.72},
+  steel:{name:"黑鋼",ramp:[[0,"#050608"],[.25,"#1f2227"],[.5,"#454a52"],[.75,"#8b919b"],[1,"#eef1f5"]],out:["#000000","#2f3237"],faceTone:.62},
+  rose:{name:"玫瑰金",ramp:[[0,"#34140d"],[.25,"#7c4336"],[.5,"#c98a7a"],[.75,"#eec3b6"],[1,"#fff5f0"]],out:["#1f0a05","#8a5548"],faceTone:.72},
+  bronze:{name:"古銅",ramp:[[0,"#170e05"],[.25,"#4a3117"],[.5,"#8f693a"],[.75,"#c9a56c"],[1,"#f8ebc8"]],out:["#0d0802","#5c4322"],faceTone:.7},
+  ice:{name:"冰藍鉻",ramp:[[0,"#18202c"],[.25,"#4b5b72"],[.5,"#8fa3bc"],[.75,"#cbd8e8"],[1,"#fbfdff"]],out:["#0c1118","#6c7d93"],faceTone:.72},
+  red:{name:"紅銅",ramp:[[0,"#280c05"],[.25,"#712b16"],[.5,"#bf6a48"],[.75,"#eba98c"],[1,"#fff0e6"]],out:["#170602","#8a4a33"],faceTone:.7},
+  sapphire:{name:"寶藍鉻",ramp:[[0,"#01040f"],[.2,"#06184a"],[.45,"#123a9e"],[.7,"#3f74e0"],[.88,"#a9c6ff"],[1,"#f5f9ff"]],out:["#01040f","#1c3f8f"],faceTone:.7},
+  orange:{name:"橘鉻",ramp:[[0,"#1a0600"],[.2,"#5e2201"],[.45,"#c4540a"],[.7,"#f58a2a"],[.88,"#ffc98a"],[1,"#fff6ea"]],out:["#120400","#8a3a08"],faceTone:.7}
+};
+function buildLUT(stops){
+  const s=stops.map(([p,c])=>[p,hex(c)]);const lut=new Float32Array(256*3);
+  for(let i=0;i<256;i++){const t=i/255;let k=0;while(k<s.length-2&&t>s[k+1][0])k++;
+    const a=s[k],b=s[k+1];const u=Math.min(1,Math.max(0,(t-a[0])/((b[0]-a[0])||1)));
+    for(let c=0;c<3;c++)lut[i*3+c]=a[1][c]+(b[1][c]-a[1][c])*u;}
+  return lut;
+}
+for(const k in METALS){const m=METALS[k];m._facet=buildLUT(m.ramp);m._face=m.face?buildLUT(m.face):m._facet;m._o0=hex(m.out[0]);m._o1=hex(m.out[1]);}
+const swatchCSS=m=>{const r=m.ramp,c=i=>r[Math.min(r.length-1,i)][1];const f=m.face?m.face[1][1]:c(Math.floor(r.length/2));
+  return `linear-gradient(135deg,${c(r.length-1)} 0 20%,${c(r.length-2)} 20% 34%,${f} 34% 66%,${c(1)} 66% 82%,${c(0)} 82%)`;};
+
+/* ---------- fonts ----------
+   The title fonts ship with the page. Each has the shape settings it looks right with; picking a font applies them.
+   Chisel Bar: straight bars with flat cuts (closest to the references). Chisel Gothic: the same weights with softer strokes. */
+const BRUSH="Bakudai",BARH="Chisel Bar TC Heavy",BARU="Chisel Bar TC Ultra",HEAVY="Chisel Gothic TC Heavy",ULTRA="Chisel Gothic TC Ultra",CHISEL="Chisel Hei TC";
+const BUNDLED={[BARH]:"fonts/ChiselBarTC-Heavy.woff2",[BARU]:"fonts/ChiselBarTC-Ultra.woff2",[HEAVY]:"fonts/ChiselGothicTC-Heavy.woff2",[ULTRA]:"fonts/ChiselGothicTC-Ultra.woff2",[CHISEL]:"fonts/ChiselHeiTC-Regular.woff2","DejaVu Sans":"fonts/DejaVuSans-Latin.woff2",[BRUSH]:"fonts/Bakudai-Bold.woff2"};
+const FONT_SET={[BARH]:{hscale:86,growX:0,growY:0,tTrack:16},[BARU]:{hscale:86,growX:0,growY:0,tTrack:20},[HEAVY]:{hscale:86,growX:0,growY:0,tTrack:16},[ULTRA]:{hscale:86,growX:0,growY:0,tTrack:20},[CHISEL]:{hscale:100,growX:24,growY:6,tTrack:18}};
+const T_FONTS=[[BARH+"|400","直條切角體（預設，最像參考圖）"],[BARU+"|400","直條切角體・特粗"],[HEAVY+"|400","刀削粗黑體（筆畫較圓順）"],[ULTRA+"|400","刀削特黑體（更粗）"],[CHISEL+"|400","刀削窄黑體（瘦長）"],["Noto Sans TC|900","思源黑體 Black（未削角）"],[BRUSH+"|400","莫大毛筆（書法字用）"]];
+const S_FONTS=[["DejaVu Sans|400","DejaVu Sans（預設，寬扁）"],["Inter|600","Inter SemiBold"],["Montserrat|500","Montserrat Medium"],["Noto Sans TC|500","思源黑體 Medium"]];
+const COVER_SRC={"sets":["7VwNcBTXfX+7t0iLLNCC8Vg2GC2EBGWSGsWpa8aAbw24wQkdSFKXtNiWnHhMU5eIVjUyOaRdQDa0nRg8ToMnHjjS0CFObav+ANkI3V5tE5zasew6sWzLp5U/isCHtBKybqXb2/33//bjbk8fkHTimbben0Z3e2/fx//z99476S0hhEABMin+DBWkopxUEPLwUDkhUXqXIxGFIaQXqvBDhOTB4k8evDITP2KThwQyDjaYERsg4rfyR2JJiBAh/kdIBj8E0jdysYblRG7sI38wvyVC889L1iud1zr68vn715BfrBF5p98KpAPi9BnZUnkZSUZE0r/36g/PyoNi9SxCjFdeIbny3sgCQhSna3ztJRxDSsaPGklCLWUHjywmyn1hVLxa80JPBdmO/dc/nxyk45Q67XMOQzGe7C5b8Ry+HWKIRM3kMNrvzjQ14wuUvPkugl4qQhHET8L/5QHfm0H2ntqIUdejHuzCFGAHa/UG7urObbfjQO/yRf2lT33Ltwkzh0Yffycha4ioEIFliLIeQ0NyK+BbGcuK9zECUZiFIlH+efXqakJmrkFnTqsWxZXKKqKgXzn6K875zOzjzLfEu7Dfss8S4Ys1M7jpNBYU13UYHyudLgkWK4RlRIlx49D1Df3AC7Pd8KEj0paiE6cMU8KVzXarCIsEcvNXUR5SgnnDt6xP+qHhdrSaIZ/lcRiW4/GXtiUllQypY1HG9XOIIhJhHqq+kHFVFIqToXqlQPY4rsW+OF5azyrc/aIo3scSURSU5DU8r0x/uMazD5nOiIU+FrM7Wua8sPb+K6/44etSPssivFPBHYBhFEEUUXLWkZUVcbBFLV5mMMIe1HAHXk2bt5IWuAmMDtnHOqpzRGjBjg7RVGKdHmkpw0l4Q8C74mxPp0on+n2dHFkUWkL9tJOI07BnNFYhJTj0ojKN7BA/L5He2fMFUlkmVSvSmp/x5HOzShYpjpaS2yFHxVqjHArSCEflYGkFukYh9B7P0BZCMm9kRvLzUBQIw+fTWSQuM/Aue+BQIs+h+yTx8IL1GElE5Dinyk6PAw65TbGXYE7jWERgaEXB6ZhhGcGjC2XaGiL9klau85xO9jnCcGt2EAUNoVQvpEJKOxxpSvBXYZmCXynNs2zRiuoRaOj6M6uz/bH0WiAl/L9D7IZOedtLB7X6QeP6dfBoVFcXc0+nYABZId5jAbQaTdwvrSdU6IYvvwabzpq2pkN7ZRo+smSwFrVua5TXDoKV0c0nTCNmgqz+U+P3VNVclrFb5fOXnjxi33L0NmgYhfjY5WKsUa/tHBz+Clz1jv2xXQon1LjavXejLP5F6zV6uvYf2rVv633H4s/ETbXx4Mfd51VzzovvGiPyLWVXR7v2yqD/+TtQSwnL1C2BgAqWMQa3AGhYcuNq0B/osCF+0xkLuk1dH2yeOZDVINpmy9GDDit19dmNwzDamrH0euPAJhk0DezHjfOWfb4++s65tnO7nohHt1szjKvO6Pb+PW+2Qm5Gx3Ogrr4Xet4+Ogjnkbvky2JgQOuDkIDl7c223llrpLW7c6dfluHAI1fZuY8zx47aP/r6k6faLzvSDGb0dKoPXqckWyvHKAcmBrT25jMNcB1lwl1wewpso4dq8BHIsqU/0W4OmNZlQ6ZldmyPQYfa3Q+5e8Z2wXZ4GbT6+46D/OsVl/2jNgyxhg7jyto6NZoBSE/7hQadojHc/sKooVtvgKHX9n31sUf2g1F/IoOv13X+PHO272b1/Vtvz7RG737rjqj1rNkJTZBSP5xvNcF3MsjK+hs92jHrxOO576Sv2gZvNCQSmqlXneoehtN29Ckjvaz/+OOMDc0AiTK4YYWeg39Jmo0juRRD9TsOWoS+N6k/6P7NGQP7hhRs3dssqz8C6NLVm09a9X3wSGPjA2pz6nSnXFUrv6fZ0AUL1kPMxBkjLo4C7DVjDAEbpRle/G9mn6pCl6lC5NvOpKDLG5O2lQLL0i/5yyr4wAT1sKobTdnaUXUgtQTUuNWdMU3ZttJ/dSRr5DpycZhrZNtS/WbzqHaufjh6woLoEJyVSxLqAzakNHlINo5croP+OqyW345pb0TBSutN34dBM53ZncOYyapts14DjD0NcihtlZiyNulUvpgonsmYENee00BemJVhpBuDDUCtEH9ombLmzIEVm+80MTghW2vH2EwMHa1mIb1sOZgmKtT6jRfVDE6WY3b9OXUu/DT1taoVezs3feFJGwZk4x04/GuMrvMvW+f6nzHV1G3agR+A3B5TzRTo6+yj8IEuo1GaVC6n0SnXboUlOwFO6SM4YKmkaGAYVIZpNe8mYER1Jt7mFS2ic2UO4J2Xey6V0imAV5xpOcqZGEqQ66LT99wkWJqdAkO2eml9DZaCZnalTPs8aHFVk6OGBdqw0fxq824z2y4PWWBcrphwT/Pf2/Xd8lqwNQNTtcno6gK1TTWgs1E1tjWaemZsICffoXfF+6HzzZRpmNBvG9celpu79tdWvAX7D3TGzuFwUWO33qcBjpEbMqI5zQKkGx0DJJqhxt9P01kFOaNHj4LZauj1B8YAvmmc7RgD4y5Q9ZPW9Qkrd7Lv7dx1m06Uy6BabaAdwvhSYzY8HV3xq2Ftv4FB/2bn5ua/Pfdk//bGW+1sRq09ri0ZsP7Vlsdyf4c81wKq+XNo7QD7hP2c3D8cl/96uGpIB/XLJ+SqLfdApMcczp5S1dra46D2q4Zqb/1G/PtZTBEjjq5eUpXp7AfVkDW9ARqHUs3/OaOpSdVusnbbY/JrB44gHZpxeGGGhmm4t0y1BpJ2g1alY4xeYkEjg3wz/RnLiFYNHls13PMlgKo46PbirB591Oy4rjsxZq+AWGPm9YHXb4DHZMicHAFKMbC4ux7gQ9l6Va9IYGYNakiUhn0AzC5o3oMOVqnvLwWtFc17yrLjdApWFHdSc+e6ZF87RMfSGF5nwN4OwzgN2G2jqDfAmGE2dJnZl+7b0NSzT/9g5OBm9YmBzLU5Y1iOPSXL+oaP9URi/13vWvLtRlZrS6k/g/5ajKi2IzoY72pt0UZrk5ozjv4HaM0Yb8+dq9Ipa1zVghMMTjewLCmPqDbmvUbWKqPWRxh8lsa8jymEPCBD1q69YmMWaDTQZn23vKdBHDagftraYxoNGMCQmvtdXJZiv+laWknbbfZBus+QkWyMBGap0az1b2t6JwHx23u3Q6N6BPua2w23qr3rQL66FktS6wapJc0ldrtmLcd8kGsxd61cj6ya7UhEpmyd+x5Sz/m4qcP+2zLGEXsEnn8boO92OGXb+rae48gKdk+Pvjc7ZmdezKwi2xOwTEsd+I0+9tgN34QGw/haZwx67GflDWb8FrDakVz6QcOsQnpLU+GNfvVBXU41aYznlsLGQMkOwPAzW1V9SeMxFVTVAvWobePcK1sqLPNrvWamllyXkX+chtyb+pipalrVx3Aa1aqPITOMoU/s29Ao/2VGb/qjGfZByzAzmo6hsy1jdVO61ZxR+YfPvgfaVhs4efMQyM8ZdlWvPfSmLcfiJgr7+NMv6yfls8f/ZFCNqlEb0l3IFXIn0luX2mVdDvY65CVMiKzZlpOzfTh3bshuBqMBoB9GT1JqjEKtTYkxjZ5CjmnCkWOXovrYjSk7HGaoj6ZwKO3rJgYJfGEIhbPUtu92UAd5C8QyZ9Ej5bdM7gpK6dhsat0g99lno/K7UcZZCm2pGqlQo7mNY/MTsM3U7Y2JDRvbQc7B1buNViu9DsVo7NMqTltfadQsVd8HclOPDqY1fHddvQ4jMNad7rgkC52mFY+64w33gFZL3tITW7c+vgG0p6AVWpFiZ7q5FMta0Wgii8mzdRhsuwGZ2gDZsDSryltKPqrBqcPwYOdoj43McapDT/TIVuPeNx4azulnW8819t/x0+7do81G9KGffCh3PBtrt+1hsD741R2JqqK94+fshHXpSLr+g+50tEeDXcheUIX8rto0c6GZ+gtZM7C3TNBJwYDhUW0oZo2cxdnjVH8t1robaCb1GJ2kznhoBHduSgUTfmsSIkSIECFChAgRIsQ46NWHOE7cWbJnGicdJqtX3bha3Ifr7Oo6hvzNg2zN4Q+vpbWWcrhhqZusfdUnLiH9exzd2+IepGLiXXuSv7nQ7W8ul5sny6F/Q4QIESJEiBAhQoQIESJEiBAhQoQIESJEiBAhQoQIEeLTAqgK/OHYvw78UbuUeOcBmUhorP+jYAmRJIk4h/iSnHe8bDnr/vv1ejLhH4WFMu90Gz0HKAheF/T8nXNOdiVDFOf0nUicKs77+27TJC3fQUvK6EcRG1cqfr+0niKVeMcFneL1/r18JYnW4wnPLVDcs3sLS+jJSldYaaJyki8eKbooVsi/4AOFYr4DvlCpqL1S1CXjFnBuXU4c102hkUIiqCZPT3WSPaSathTKZzqHRpVZRJRwIBFNeK9IC5wOmBKSbKBtZ7+G8ggKHcQ/NXp6lZgXTzxTQQRpATePKq0swBf6HyGiVBfh6X1HA+yaiFsER5LlTsM6Ty6BKL3TCSNhf4KyaxdtssWXuVrc4V7uKAqbgAWVgCUjjG9NablrQ++oQx015yzviqom0fO+7jnJP3SrcErBj8x461HNx/mY49liLztDTSsl1QoG261UX7w5zxlicK7n5ig9WnuQKHUOkzGLycwFhJPmE4VfijFa6hy0fJ4SGreULBZa6HFgKg2G+3RGCgSLFy/0BChfHD1ThpiHoiPx+YMgrt0WCZOFMS8V6qA96Qla3lFZ4OlZ4oBXBOcwrlcUuOWNI7HFw7kqsPls4QL5JgTaUQ05385lk/QxiZoOFk4sEr1I4ooLqU60d0ZgZ/u5w/PecesASRQFQWXe8NRDRApIRON3zp7CKHQE2rQmn5cBnyFnsfkx2ECGS/QjXiqOJFN7uSgy0e6SR0uc27RY29WFy6RDAQvd2zgAy7aQ1awvlNtIEPxTyiK5wveO5NtI8rv2xOPHkeYk7hGCuvM0iGh3dd4ZbcGXli9mMZFzrMe7T37hlIjDUMp8KoOT5CwN7KWusrQKiq9Mmg0CNiA1f8zkJWW8kz8TGJh1/c9ybkfO2XKePliBvjFuIxryO51uJOxXdGR3ooQewGcOFc7Csa5iAud2MCEDf1tcqIHiG9V1C/fbjuHZeiY9t664y6nBQJrxjgpO58moVx/ZCDUajBS42P0fQNcWRKnKx717dF0pddrvI3RyIKOMz5o3+FKLS9m81elJc5xsaIEyS+rdx3oOWiqIjnM4N6BcsXlKK0lGwAlNpMfWS7ywFL1qOJQ73UhCnm5KOPcElzsblBP/2D4hs4m0Jh8DgYmGmfSK87UUAkEvFFJEmeicQhdcUUYXOYmt2BMRkqh2ZbLCEXDLHg4Esu96pUIkzIvVNclLiPRFYpcSadGLEbGX7Cwlwr3otJnzdnCswrHjclCahAYnrkiSnv3Z4OpjHFzRy4OhUzDIoclJSXBpB33IEoabQAscmWLFQvIPeAg8V4XWesm7jBQ7hC0kNB2/7KLLT1Fxn87irfYmyZOF1Ir33kkDI7/oEvn8GjMQJXxAfJqAksOYfiEXDAOleMeiiEVDM+48WXh0hVRsL2EqbsXFQNIbgZ2kDutOWZJHWit9yTlfSHdlHQl4jymeddiilJCKV2Mz3SKB+JkUmL3JFGsQlnXd5yazUvS0G67Q9fx8YR03WZwwbPnEEM0HSyU7SVSKGIelRQMJnxm/3+AmXDNiMKu4iWmlLHRvMIUzpGyR/SqD/hM8gVwXT+PH7TdYd/4vYiFfdc4VqE5wH0YyCUSu2nkCCRIzTxwyTIruvFW8g1jl5X6pu5heMD0wXq7Ur+UKDZIndzlDfuLZxOFWqQUXqH5DmIQCKp1BvZ1dsugmX15wW68/0+PG6prCw6Vqgi4XyYRNE9VmAV9Y3EiT+5Ebz8ZcIF7WX5AqhKIBcSNRp7jcxZL8fC5MMhnXEU/nQmwLk3Eq42nGFYWvUOiKC0S26PzmVXUWrv7DWer8lpLr6lL6OoFYC8uscTKxxXUVnzN4Oh/7tFeswaELmE2aYoVCF1UY3pUBpbzIdOWPCIX2irsbdVcDhbGxaFpgkMJ6wGNTifasuEqKorsamDK/Z/ETbrN+6E3mM8Z9fo84nt3KucJzfhT+4hF1oSqiVyEiEeFLxFlukRlkFlpp/Y8Z5ERFwsXMajJY4RLATGevSciN3yLJJRx9FBBPSp5FO6xnyL3u8uQaqtYisq9EqRIVjJqaNTwzcZJcxE21rSrmf6WwpfM38kRwcplVLqbWZF8FTeedmZFGQU2N930BFUDEjTrxrv004X8vXz/hCLwy8VsmpuTQlNHMuF+2sMKUgV2c2NwFduTMhKaCb2aORfZ2bx2K5GPXjQh23FQ3hUFF6XfxAD/VLX9fTkWbHiyWgvV9VYT8eoEJ5PR4M0mTEaESSDtW5G9UnPaVgc7pMr3GqyoGN52+Dlj+p4u8rpRJvy5ix5vgolk40SB8sCuueBn/6XmUqBJ+ex0iRIj/7xBCE4QIEeITgEi8r2i8b8G8NTU/NRNxQshIIf73h3U4yYYIESJEiBAhQoQIESJEiBAhQoQIESJEiBAhQoQIESLEpwX/DQ==","7ZwLOFRpH8DPjEmTZs0URVeTLZSiu61kJroI0ZboS0J2SUVJ0jYxoyhdSVIrRW0lmxCKVRwq3ZDNbUIctxolpshMZsy83yCVcom23dp9f88z5/pe/u//8l7mPOcA0A4mIuH9C2QpbRKijUdOisgTpbSlbBCEgLRQCpQkW6mW45TW3fukkBFa8549++0lXOtODIRSYgDeZMG/rQ2PQCCQDpFvf4r7KNzeHUp1EpEdw1dlunFYIh2/lgwUVstFyrv7RITeFvEIIDdvye0L8FT56ZTJCyoyAEGmtEqBp7ZLQOhWhn5t5Uu9aOly3r/3ridqPnsBWltIQlIettymW79J1+e/7R+k3mUDZC4QtuhR/K7H93h3zNxa+lb3XZQi1XvB8W/3H/X/LIkb0tt7Dx5HbXUwT4lbSoIAT5c4qxpC7aYSOktSDAtBejPE4DsuHL+YgMhQEH2CRCaJ8xHpiBfConcYm81N6abmLhvQmXaJiH5bfW11Uj5uuiTZm4PWnoPQrto+LXlZlNZWerWTmdW9MPS3NXYa5biubE/oyiRqH/Z671yGiOi+KZjeqj1KDyz6RlQirq1y/HsmIFA7awu+vcN2CaV7iYgfnTRvqMoIq71LdBNbV5lCwJttDiKEovoF0v3n/Ax0MD7DMRjUCipmMmsS+nN/A+CAOe1OmRAkZTc+Wh6VP6EaVO7QfnJYxOCvTbO5asb2AHPNMuttpqpFN9SMmrRJNSI+2ajyyep5VYyZBnx1N2884eAJIZMvH8cEs/jxXJ2GELC1EdVNyElmAMwR0Bo33I0KES/dmngLrTwZb/XaBNUpvDDucbUI0cQ4p8pUiiplsGo+yMMK0ajNM9eEOdoW+9xnZl9gAi5zFQBV1cBDuGgDOJ7bBzSym0Q6TejIRjYA/Ccc2Su8QAujJF51DiPw6WuBB8cCCxkG4qy4Hi+2YbxtGNfOtr6g+JrAbZ9s3QmaK5qvVJY/25+ZKsjWNC+sQd3RJwVRRpfu8PeYePMOi12ingVvH0bSx5iz+2TebeIPOxOgVaOxerWc15TRctcCF2jNVF2tLr2fTTckWZWb/s6eVphFC4h0DrksDjSPTwcTLrotVy8Zk7H2B4xkbK0RorXGkn5cILf3xNgdWw7pSVMJaVNfpFEoo0meczVcpYfmDTKUVSGNGpYybvDUvFQHihDdrqN5Eb16HjCNfqkQDRzxlGfhgPG4TPfL0/wBE6i7gAe696Un5SgZz3omitEn4BlhzuNL1tRn5W0aaO218rtZSOJyJFDxkLL3YpYWdablmtpqdI3Try5oaVX6jKTF0XdHKjYB4X4hr0ztqd7IqA0RZIUiLAQFeyrOJZrbLgMuPI99QahSlMVOt4TJW2Nu1x9e/30js9J1ZoWvcrBTxJhzSehTdKZObkQB6tFYSvq9IQtgsoYV9sFFQw69CHDXCLtWI9zoZWSuGmBxc24GTSFFH/eqIRUALi+/+Ok+Bm1REcCy3QcDkdsQZbEYYCi3XlB3cCmjFvWt5TkKLtdHVt9af4KdJ4xiolYFwgWrrDxcASexQIBpba4E88zqPU8/IzeFb+DMZiRh8U5HHLFozN353haG9qOX6dbCunUZQ+Jx+y0uBMUkek/e9vCmDKf+Bikzf0bdpTKXhzpBTU94OQVzT7pc/z5t4eCcbCm6zpyBKOjHbahKEYnPmuSkZwNOVG5MULgrN0rY3+KmktvlwlnPUeyejbTsyXqmGy0GGGanOoU+DL99al3gsiiet2+K6sgpoj4nmWN+PE0gJHiYiBIZfPtNQ+46Bj7cu31I9ZGxpEiV4SXp5Cxb+9x+uH12RNmcAasPU77DiP1kcTLP4wYRR0zcNa80BLllf2/JjOPiXcHHMY3niwY+Tw62rxL54oPVTpdeFvqWYEmc23aXxAq+lnZO8e6+Yg9ZMDmw0SMqs9o9ZrlXVqixE0PAVTJj5AfKnTEXiIuw0YdeHrOzd8G4SqFMYaRQIG+u+NPyggP3jf509F94+dz+/GtXCpM5bjkBN+bv2EawTDZOLVfzL3ItbTjCdtlBKZq/DZ+Fn35XrnCdad1e5Zr0ARN0j/kp2xxLsHlpM3/zFMXXF2jkEwj659XjKpRdjQp6Pnp+Zfk/LeEvHT4hxjsubNQhdYORJg3+ZRs3FulOHKXGmsYBqTPmRt2+PpUTHzHXxzuarWfl7G3Qtz6ENtS0SjC9JDt9cqk30i/psuUDA12f0ekHNMZwFuiG26v8XHUOR/qJ7R4gRwwtGXHuLn2fAe5BhhTuDNXL1LT4Ottz5otx7PUAdXcGQ3Uakot3ZtznnUMfMt2StDZnYWSl/A064el8jRnFmS65DwBY4F680HDVYvrR3esfswsENwdb+M9C7rv9VrosnSVl6URDnrx8bZx6VsshkaXmMzxCoC9SmMJLqp58BAv/s8aOAgICrm96duL3SJr5atkpu/YeCh5dTifrLh4ut/223tOms6dYR2IrKREp8/vXWqmreArEuLGODn7sfvSTgkzBToQs8yDMYlTtSwe+g3fCRSceN8IhauUBLUNny7Xmpaj5hLOLUeOX55P4t2kDcTlBMhoudvcWeyaUpNwjscr6Rz84PMNMe5vOuLDGKxs0eGHMynrvS8tMGjSvKu0u1Ax0L7DxMP6Zq2ywU6Zk0WuU63eAx7c4ajZ0Mtm+6n4Vr/ZZjZvdrdo9AhLf8leAcrkAoKB5C4AYlczjxsS5xHr7mvD1ai2PVSbeWBZru32qp62BoRJjK38px/xZuJG2aZr0UVDeGKSfpAXyX1ltTGXGAqvLlRxs0bWgLFu6O2N3xdphgJw1bvYvqg41JvEyuy9OU9zOd8srMAZCk0N7kTDTTIwzvGZX7DZwfF2MKFko9AkyFhfVjfD5w0Ph6TnzYgDO//F4vlHxATKI/y1v+SX1g+wLhU0yk0QKypPoertGrhI86xtg8Ws2PlQeXapheMUhd0D0HEpi2tofommGJs8XDNc8YRx75HDQYiy1r0z52ImTpP+8/4p0b67XadwRpHRKsddDvLivttrEYyEupAe1cumUOqUNNaqRyzR0/TNYFhG//zJvmXD72IQ7pD/ORzxYRCaG52YYvK5k7DmIzB/qOvXRWh2Ls+XTJ2SYya+P9ROzt8TqeNJcAuQniJVJlmOPT7Qu/TEu4E7tgapB5YH7z/Ax881VPisGhORxL44fX7hSN9VtoQlDM+jVdM15wmnzsgMSbz1ir7m3LN70gYbeDMUletn6IfRjR0P7mTqaAS7gM4Fkli2UmEckMRQAXtfdnAnS2kSF0VsUHXaD4iT0Z42VmPYA9+ik4tet83HJWKsmRCaTtuwgeibnrWqsq10RUoVS2QNeyIqnqBwNofkWxFi+io9Uclt9re9mW1HA/uFEAvP8SG2B9TlikesmP78SSX1irhC7U31bzPsfDWzm/qHKrAW1WeV2FldqASOqoiE+xPfCOOM8hknizX2v88OjbUzxr/T2h5pL3wF5rjr5gBMx8/bKkU2T+1ZLJBKsLg3E7GPpVWa/8ieti3XKdT5Z7DBn7YinzIMrIg9fPN3IMQlhe6pyNxSstxROyB0xyczGNC7g4ZhHWxx2Fk+78XI6LvR7H+II1RsLnR5PGTTSaPb4sLpykNTSXCazRTsteEh+fF7LISuzxEMKpc0X3Jnt/KMKVzJsAv4V6TyPhIarkxrFCqIxW2suzdrjjTHqxXYrvvPNNM7hGCzxG/3dupW/1a5yU18xeNN5hQELw4dTDYYRl1z3WL+3Ng8dtOSHQ7PorxNMzhyTVBlfBPhpBvIP52gAb678RrXpSo6Hf4x4OZ4WvzEC8OPqLwJba+ehlE04rQvS1tJ7lEuN8IhD2RxaZej+qWIh4GNZIvTUjTytAo+c+8/9ZfRP6adFcKQVkysGDsL5x1GHZnAfkx3l+t/Yna920lErNC8+iTirIsq4VCo3zJOaduSJo1aJxNQ0QVNj/Zmh/0Pu6I2u0j8x4I4ZjrxJLriPEWuHfp+Je+VPmO/wUbEOJaki8tTaDSjgAOx0cQlNnb9rSGSodeRGoFh3VBi2O1fAWheOX+Dnt3ZJhrl/lnyuTyNtUnIfypvV1Q/wjxUIBAKBQCAQCKTThxQf/cnb/KRNsiqhdZ5V+osL1/z0hQNCOnlGIwYf03ZPE0EmQuNCIBAIBAKBQCAQCAQCgUAgEAgEAoFAIBAIBAL5CPqnJGL1uNiUN/sPXqsjflpufPsD5XYFUNunpfaiPb2B1ZGEuDcVsjpQEbUtFatr5Y9qfX+RhXtbrDXS8fuIhHYabX7dltheHnpnWvkXQOywYd041Ce+Z0romSiEDk/p/6R2WF+u6E99C5vy7foWvkWB9K78itDie++SEJXfe92Zgpv7oV9QWm2C66kolE/tI5tR/II6wf2dBiD88xH0GWrAs/662nqnA2ovIhPf4aBJ7bZPxHesFOJfIGgnvvE1D2bUTxq1cG0qxX+g+ubsLMJfLBPxbY30XvTWhO57fSry1cbrFxxiqZ8yzH2qLfGfp8LPHmzpbUFM/KrCht5VgwmfO3UjEBBIuykj9ZuaxP21cxLip1XzN37ojtJ1d0Ehdr3cxr8vOIXa03UCoRfmYPU60v/e5Qmuhwslek875tGEz10/fWsDKvVDgamfG9b4tgjAIf8O8B01Bt+dnVlft6vQe2fcnvQy/4mJ5b9uLsL6LIf+KE/zZybbvpNIIbRcav4IRsfDNv1Lyf7fhfh1RmJvJOrheEKVtJ3Q3H79r6KPwn3THgSBfE1TVggE8m+es3wzUAhw+IRAIBAIBAKBQCAQCAQCgUAgEAgEAoFAIJD/KP8H","7VxNbFxXFX5v7MYDFHl2ICHkIQh1haio1BIF603ZgNRF2LBCirNBXbURC2SoSe5ULCIBUhYVFCmCgQ0LkOqCKnkR4mspVK6AMovSOI2bvFQWmMQ/z4ljXzsv7x7OuT9v3jjj8U8caifnizPv3fvuveec7/y8eydywsNBFQoIgyCAvYQ8VL78/GFcNfhCKXj6x0tTACn1i+0u0P/1INA0QdMnHNK2m7TsGwj6vxa9gz19m60YPCAW7TLLEA1ARO3GOkD29nuNI/U3+wPoWzxD7ZfeO3MkOD6BIxZH0bpsYVkeDYPn8/HvLp89MvFmTxAG85ODlz47CRcnB18NJlDvxTjD58lMPHiip4naztv2MrZrTTjk2nCxOVgPLnawxrLx6bqoQz+1f/mlJf3GPBwdiuCZoOhLGtiHH/3mLobG5jbT8Mh8inKByh7HvCHb9+0Ny4xuqAZBbzdfbcAxaPNPFBl/RvAHutjuGP80E4APbc7QZ0+pFgS38H4A14yetWLz9cPgxJq5+UxRYt9WtaInmA+eCHvuV3sChoInfaO8uS0dcjoKitkN0LzXLduvLbvYH/2m0JRxMEAdYmceeDq/O2Evddd8ci/9DJF+SBFU7prrGCU/1C3KdZHt63nxAEjaPJLPHjBV2lais62y3SkexFrRkdTh9Sh1Vq+2IfDDqk2IMKjhXzOr0sG4+oZV6ravtAvqStXO3d/uDT4ZlL/VS4s+EZRr+ZNXOw7v7o1qNw16Nn1ihIbu7yYIy4Wx2CRCW6SG5qde6UBbvfNyGxQwM3vppxJsY8JeoEQMfsMtXLPsVXYw31lfDr1XSkVbuxXbLbRqM7uyu5Ss7lCsFOrvQwsvnpM3FtXPMU9PCZ0OwzFFySrmzFYr+uuyr/oWAzcTe3Mlz8Xz7vplk+caEijkvdvISS2S7+BuZBZrgKKe2VV4EWh30qQFMhJG8iRtl3AE3cfJhTk4L78CifhNPHcbB09do8lyFHzZHnJVRbitFly1lxX/Hrt201UfcVY7hYQ0F2WFOGVPWtkkGozF6UvN3zfkyxcyo9fYOeULVGxmZHZapmOQiVsjNf2Jl3xW35E0LLn6wbQ07w2prQA/eKBVGVEtd52yW0bQOPdcQloZ6nVqXr9SL+OI8auJikdowvsC5ys4r6TCZxDfJlL+jVOI6DmS14BUDIk/G4dg1+zxMXkF4pPwAqTxaQ3P4XTLPRXnmQgvs0RmEhu5qTYPp9OCO6Uz3sfEsL0kk7lLSLMXbO+o5SnJA8hg3WzjpbKGx9iK59rf2cvWxcnf7PzoVj438wwP/cs6TCVWIRsE6VAh8FIfhiRpJZkaSyGLx8S0+pnhQ8G6YQhed6OVU+BO7qPEG+tCTlyycWL0/11L0mWtfKT5lyCOi4cWLVGmK7mTZ8aMXrdDGiKjNqYNug0HCjAONQpnRtKsnbwoU2FDE36UmiQbw7Hj6dV1KzdxLsl3NNFP87u3lnzgDX31Xst5FxrzBdI1vI3h64xbv2yo0ybQn7mUe/s/kNHoW26cjZzMeU0L4/lkBScNGnENhYbFebConC50RJqm2JmSBHo2h25I41dgBYXetVGmWolmx1xBAiRFZGZlCy3zgEkwhU3LhjMOjwUNlDEWhRjXwp5/ysjommHnbcM2qoE9AkNReVG0bhbD+44Um+7aBv7dVmlTFBIRRq0ay2AodbXIW5jlAUSdSNaKUzTJE16aPJqyw6VxwiioT60uoPlS0npKfhdTYwRliOFsFc6spQq++JY4BfGHJ9VTmqJqGvMUsr8ILyrxN01YydoSKr5/R5X6hy2lRKftdpoiTwIJyuAHbsZdGp/a4gipwps/QbJqqRmjEBO3hc8jn49jVg0jNJGDAkYVFQ+dc5YuuiPFU37L9y7FGT1/rbff0/rHG0Qeydd65LX+cVNFBEmJThGNtEZy/BfYGxubxX/tYvhCk7Fjx1YTtUA8CTiprZZLeTmmJWds8CAG3XtDIxML5usEkVvVHEZHUeWRkL5Oc4/ZmvMTz3GDMtOSf5NqjcxUGNzDtV7x9LWqf7rBVdeMybHrU51PKXVbaqQvdDEVA+3Y/rwftYTFTbdCEycIy7spUFhDJMaviJK8eCZt+ZpGdpk1+EhRd8M/bIBe1loIL9pGoKIN+qqfPG1eXFkjD8c03RCJyglMiu9kj0bhPjE1yCeQ751ye5Ouu526+DWcnoGjl/Q7kVDDjhZiNrpn6nvmbMK8ehnGYVJks+jKY/HIaTTFOCFJ8UcYK6LrWubnTBM/n3OHopQU+ZVOnF6uVPW5XPKcynYbddZfOFTNUsXRb4iR78ULyTiIQhlsRUmREntqKlp7nbRqknJx25zYJSS5YKEt369L+cHiDTxkxWv0tVGm5D8umgg0x2SUMhj8Fr4f8VcqDAaDwWAwGAzG1t/ttn8lXvHHAeiyoT700JU700MHjoZSWvTf/7TwRVr+Dzv+GZ8DGAwGg8FgMBgMBoPBYDAYDAaDwWAwGAwGg8FgdERtO4PqO152wl03/FpdeXuzN/xy3uG2VjXo1nxoqO8tQYw9QfmAZdIjjMrBVb20PQdW24e0DK6E5kGHX0QOd85ieX9Ef8gZtF0aSnsorfZ/y8xSR+Lz12nvZmyUHiQ2dvG27t3XpaO6swwtdQqYj8PCyhZ8l7Zh9OP1xqtXt/Oa26EvPzYKa/twB7UVH70BY48PNNVHZxN3kM8O22O/Ut7iuB0+kCd3nF7hfjj4ljiTD/qZN2y5srLpprt+AOkpbdJZ27ow79+zUm13zt1JlXksNpa8m+meBJ8IWv9fY6W3lRflxzZiGLv0dMi0MRgMBoPx6KJ8oLStsMMYDAaDwWAwGAwGg8FgMBgMBoPBYDAYDAbjccX/AA=="],"fam":{"Chisel Bar TC Heavy":0,"Chisel Bar TC Ultra":0,"Chisel Gothic TC Heavy":0,"Chisel Gothic TC Ultra":0,"Chisel Hei TC":1,"Bakudai":2}};     // filled in by the build: which characters each bundled font has
+let fontsReady=false;
+const faceJobs={};
+function loadBundledFace(family){
+  if(!BUNDLED[family])return Promise.resolve();
+  if(!faceJobs[family])faceJobs[family]=(async()=>{
+    const r=await fetch(BUNDLED[family]);if(!r.ok)throw new Error(BUNDLED[family]+" "+r.status);
+    const ff=new FontFace(family,await r.arrayBuffer(),{weight:"100 900"});await ff.load();document.fonts.add(ff);
+  })().catch(e=>{console.warn(e);delete faceJobs[family];if(family!=="DejaVu Sans")toast("內建字型沒有載入成功，先用思源黑體代替。");});
+  return faceJobs[family];
+}
+async function loadBundled(){
+  await Promise.all([loadBundledFace(BARH),loadBundledFace("DejaVu Sans")]);fontsReady=true;
+}
+
+/* ---------- looks ----------
+   tab: shading table measured on a reference title (see TABLES). light0: light slider value the table belongs to.
+   be: where the bevel ends and the level top begins, in half stroke widths: [mean, how much earlier on the side facing
+   up / later on the side facing down, how much later on the side facing right / earlier facing left]. ew: sharpness of that border. r: how far a surface must tilt (0..1 of a full
+   facet) before it starts / finishes answering (a rounded ridge shows the level tone). outA + outB * tone: tone of
+   the thin edge line. rim: bright line inside the edge line. eh: bright line where bevel and top meet.
+   stk: strength of the short brush marks along the strokes (sw wide, sl long, in half stroke widths); bnd: strength of
+   the wider bands (bw, bl); mot: strength of the large soft reflections. yg: how much of the measured
+   top-to-bottom gradient is used. set: slider values the look starts from. */
+for(const k in TABLES)TABLES[k].t=Float32Array.from(TABLES[k].t);
+/* roof: every facet keeps one tone from the edge to the ridge, as on a cut gem. The measured table mixes the outline
+   into its first columns and the flat top into its last ones; both are replaced by the tone of the facet itself. */
+function roofTable(T,c0,c1){const nd=T.nd,t=Float32Array.from(T.t);
+  for(let r=0;r<16;r++){for(let k=0;k<c0;k++)t[r*nd+k]=t[r*nd+c0];for(let k=c1+1;k<nd;k++)t[r*nd+k]=t[r*nd+c1];}
+  return Object.assign({},T,{t});}
+/* env: reflection of a slightly domed top (ang: where the bright horizon sits, dome: depth of the dome's centre in half
+   widths, amp/p/w: bright band, dk/pd/wd: dark band). rf/rw/rl: soft reflections along the strokes (strength, width and
+   length in half widths), rfh: how much their brightest parts flare to white, rfo: tone given back for that. blur: overall
+   softness in px at 1080p. cl/cs: cloudy mottling without direction. */
+const ENV={ang:135,dome:1.05,p:.55,w:.18,amp:.4,pd:.45,wd:.3,dk:.4,lin:0};
+const STYLES={
+  soft:{name:"柔光鉻",tab:TABLES.soft,light0:100,be:[.70,.12,.10],ew:2.5,r:[.05,.45],outA:.2,outB:.3,rim:0,eh:.3,stk:.01,bnd:.10,mot:.04,sw:.3,sl:4,bw:.6,bl:9,yg:1,
+    env:ENV,rf:.06,rfh:.45,rfo:.05,rw:.5,rl:4,blur:.9,cl:.04,cs:.6,
+    set:{bevel:100,soft:1.6,outline:.7,ridge:30,light:100,contrast:100,mottle:100}},
+  flat:{name:"平頂鉻",tab:TABLES.flat,light0:100,be:[.70,.12,.10],ew:2.5,r:[.05,.45],outA:.3,outB:.35,rim:0,eh:.3,stk:.01,bnd:.10,mot:.04,sw:.3,sl:4,bw:.6,bl:9,yg:1,
+    env:Object.assign({},ENV,{amp:.25,dk:.25}),rf:.04,rfh:.3,rfo:.045,rw:.5,rl:4,blur:.9,cl:.05,cs:.6,
+    set:{bevel:100,soft:1.6,outline:.6,ridge:25,light:100,contrast:100,mottle:100}},
+  hard:{name:"硬切面",tab:roofTable(TABLES.hard,6,18),light0:88,be:[9,0,0],ew:9,r:[.05,.45],outA:.11,outB:.28,outD:.45,rim:.4,rimA:.5,eh:0,cr:.45,crr:[.05,.27],stk:.03,bnd:.05,mot:.03,cl:.1,cs:1.2,sw:.3,sl:4,bw:.6,bl:9,yg:1,
+    rf:.02,rfh:0,rfo:.02,rw:.5,rl:3,blur:.3,
+    set:{bevel:100,soft:.5,outline:3.3,ridge:100,light:88,contrast:100,mottle:100}}
+};
+
+/* ---------- reference presets ----------
+   One click sets what was measured on each reference title: font, slant, width, tracking and look. */
+const PRESETS=[
+  {k:"queue",name:"排隊經濟款",desc:"柔光鉻・直條切角",set:{style:"soft",tFont:BARH+"|400",skew:11.5,hscale:86,tTrack:16,growX:0,growY:0}},
+  {k:"law",name:"法律款",desc:"硬切面・直條切角",set:{style:"hard",tFont:BARH+"|400",skew:13,hscale:99,tTrack:13,growX:0,growY:0}},
+  {k:"survey",name:"柯男大調查款",desc:"平頂鉻・直條特粗",set:{style:"flat",tFont:BARU+"|400",skew:14,hscale:86,tTrack:20,growX:0,growY:0}}
+];
+
+/* ---------- effects ----------
+   metal: the chiselled chrome look. puffy (膨膨字): inflated glossy plastic letters with a thin coloured rim.
+   grad (漸層字) is reserved for the flat gradient look. Switching an effect applies the shape it looks right with. */
+const EFFECTS={metal:{name:"金屬字"},puffy:{name:"膨膨字"},cal:{name:"書法字"},grad:{name:"漸層字",soon:true}};
+const EFFECT_SET={metal:{tFont:BARH+"|400",skew:11.5,hscale:86,tTrack:16},puffy:{tFont:BARU+"|400",skew:3,hscale:94,tTrack:4},cal:{tFont:BRUSH+"|400",skew:3,hscale:104,tTrack:-8}};
+/* body colour, rim colour, thin outer line colour */
+const PUFFY_COLORS={
+  redyellow:{name:"紅黃",body:"#ee6a62",rim:"#fcd995",line:"#b8925c"},
+  pink:{name:"粉白",body:"#f78fb4",rim:"#ffffff",line:"#d98aa8"},
+  blue:{name:"藍白",body:"#4d9ff0",rim:"#ffffff",line:"#7aa6d6"},
+  yellow:{name:"黃紅",body:"#ffc93a",rim:"#e8473c",line:"#8f2a20"},
+  green:{name:"綠黃",body:"#4fc86a",rim:"#fff2a0",line:"#8aa04a"},
+  orange:{name:"橘白",body:"#ff8a3d",rim:"#ffffff",line:"#d98f5a"},
+  purple:{name:"紫粉",body:"#9b6cf2",rim:"#ffd9ee",line:"#a882c9"},
+  black:{name:"黑金",body:"#3a3a40",rim:"#f2cf6b",line:"#7a5a1c"}
+};
+/* 書法字 (cal): brush font + smooth metal gradient, see app_cal.js. Values measured on the reference 「史上最強 六月季」. */
+const CAL_SET={cFill:"grad",cBold:5,cLight:0,cContrast:100,cSheen:30,cRim:35,cEdge:40,cOpacity:92,cGlow:45};
+const PUFFY_SET={pSmooth:25,pGrow:12,pRound:24,pShoulder:75,pPuff:100,pRimW:14,pLineW:5,pSpec:110,pGloss:65,pRefl:45,pShade:100,pRimShade:100,pLight:125,pShadow:30};
+
+/* ---------- defaults & state ---------- */
+const DEFAULTS=Object.assign({title:"排隊經濟",sub:"The Queue Economy",metal:"silver",style:"soft",tFont:BARH+"|400",sFont:"DejaVu Sans|400",
+  skew:11.5,hscale:86,growX:0,growY:0,autoGap:true,tSize:350,tTrack:16,autoFit:true,shadow:0,
+  sSize:58,sTrack:48,sBold:22,sWide:118,gap:96,yOff:0,zipMode:"1080",
+  effect:"metal",pColor:"redyellow",pBody:PUFFY_COLORS.redyellow.body,pRim:PUFFY_COLORS.redyellow.rim,pLine:PUFFY_COLORS.redyellow.line},STYLES.soft.set,PUFFY_SET,CAL_SET);
+const KEYS=Object.keys(DEFAULTS);
+let S=Object.assign({},DEFAULTS);let prevFont=S.tFont;
+try{const saved=JSON.parse(localStorage.getItem("chromeTitle.v7")||"null");if(saved)S=Object.assign(S,saved);}catch(e){}
+
+/* ---------- UI ---------- */
+function fillSelect(sel,list){sel.innerHTML="";for(const [v,l] of list){const o=document.createElement("option");o.value=v;o.textContent=l;sel.appendChild(o);}}
+fillSelect($("tFont"),T_FONTS);fillSelect($("sFont"),S_FONTS);
+const metalsEl=$("metals");
+for(const k in METALS){const b=document.createElement("button");b.className="metal";b.dataset.k=k;b.setAttribute("aria-pressed","false");
+  const i=document.createElement("i");i.style.background=swatchCSS(METALS[k]);b.appendChild(i);b.appendChild(document.createTextNode(METALS[k].name));
+  b.addEventListener("click",()=>{S.metal=k;syncUI();schedule();});metalsEl.appendChild(b);}
+const effectsEl=$("effects");
+for(const k in EFFECTS){const b=document.createElement("button");b.dataset.k=k;b.textContent=EFFECTS[k].name+(EFFECTS[k].soon?"（製作中）":"");b.setAttribute("aria-pressed","false");
+  if(EFFECTS[k].soon)b.disabled=true;
+  b.addEventListener("click",()=>{if(EFFECTS[k].soon||S.effect===k)return;S.effect=k;Object.assign(S,EFFECT_SET[k]||{});syncUI();schedule();});effectsEl.appendChild(b);}
+/* 書法字 is meant for dark footage: show it on the black preview the first time it is picked on the white one */
+effectsEl.addEventListener("click",e=>{const b=e.target.closest("button");if(b&&b.dataset.k==="cal"&&$("frame").classList.contains("bg-white")){const k=$("bgSeg").querySelector('[data-bg="black"]');if(k)k.click();}});
+const pcolEl=$("pColors");
+for(const k in PUFFY_COLORS){const P=PUFFY_COLORS[k],b=document.createElement("button");b.className="metal";b.dataset.k=k;b.setAttribute("aria-pressed","false");
+  const i=document.createElement("i");i.style.background=`radial-gradient(circle at 35% 30%,#fff8 0 12%,transparent 30%),${P.body}`;i.style.boxShadow=`inset 0 0 0 3px ${P.rim},inset 0 0 0 4px ${P.line}`;
+  b.appendChild(i);b.appendChild(document.createTextNode(P.name));
+  b.addEventListener("click",()=>{S.pColor=k;S.pBody=P.body;S.pRim=P.rim;S.pLine=P.line;syncUI();schedule();});pcolEl.appendChild(b);}
+const stylesEl=$("styles");
+for(const k in STYLES){const b=document.createElement("button");b.dataset.k=k;b.textContent=STYLES[k].name;b.setAttribute("aria-pressed","false");
+  b.addEventListener("click",()=>{S.style=k;Object.assign(S,STYLES[k].set);syncUI();schedule();});stylesEl.appendChild(b);}
+const presetsEl=$("presets");
+for(const p of PRESETS){const b=document.createElement("button");b.className="preset";b.dataset.k=p.k;b.setAttribute("aria-pressed","false");
+  b.appendChild(document.createTextNode(p.name));const sm=document.createElement("small");sm.textContent=p.desc;b.appendChild(sm);
+  b.addEventListener("click",()=>{Object.assign(S,STYLES[p.set.style].set,p.set);syncUI();schedule();});presetsEl.appendChild(b);}
+function presetOn(p){for(const k in p.set)if(S[k]!==p.set[k])return false;const d=STYLES[p.set.style].set;for(const k in d)if(S[k]!==d[k])return false;return true;}
+function syncUI(){
+  for(const k of KEYS){const el=$(k);if(!el)continue;
+    if(el.type==="checkbox"){el.checked=!!S[k];continue;}
+    if(el.tagName==="SELECT"&&![...el.options].some(o=>o.value===S[k]))S[k]=DEFAULTS[k];
+    if(el.value!==String(S[k]))el.value=S[k];const out=document.querySelector(`output[for="${k}"]`);if(out)out.textContent=S[k];}
+  if(!STYLES[S.style])S.style=DEFAULTS.style;
+  for(const b of metalsEl.children)b.setAttribute("aria-pressed",String(b.dataset.k===S.metal));
+  for(const b of stylesEl.children)b.setAttribute("aria-pressed",String(b.dataset.k===S.style));
+  if(!EFFECTS[S.effect]||EFFECTS[S.effect].soon)S.effect="metal";
+  for(const b of effectsEl.children)b.setAttribute("aria-pressed",String(b.dataset.k===S.effect));
+  for(const b of pcolEl.children){const P=PUFFY_COLORS[b.dataset.k];b.setAttribute("aria-pressed",String(P.body===S.pBody&&P.rim===S.pRim&&P.line===S.pLine));}
+  document.body.dataset.effect=S.effect;
+  for(const b of presetsEl.children)b.setAttribute("aria-pressed",String(presetOn(PRESETS.find(p=>p.k===b.dataset.k))));
+  prevFont=S.tFont;
+}
+for(const k of KEYS){const el=$(k);if(!el)continue;
+  el.addEventListener(el.type==="checkbox"||el.tagName==="SELECT"?"change":"input",()=>{
+    S[k]=el.type==="checkbox"?el.checked:el.type==="range"?parseFloat(el.value):el.value;
+    if(k==="tFont"){const fs=FONT_SET[S.tFont.split("|")[0]],pf=FONT_SET[prevFont.split("|")[0]]||{};
+      if(fs){for(const q in fs)if(pf[q]===undefined||S[q]===pf[q])S[q]=fs[q];}prevFont=S.tFont;}
+    syncUI();schedule(el.type==="range");});}
+for(const b of $("bgSeg").children)b.addEventListener("click",()=>{for(const x of $("bgSeg").children)x.setAttribute("aria-pressed",String(x===b));$("frame").className="frame bg-"+b.dataset.bg;});
+$("cReset").addEventListener("click",()=>{const f=S.cFill;Object.assign(S,CAL_SET,{cFill:f});syncUI();schedule();toast("書法字的設定已回到預設");});
+/* 書法字: a picture to fill the letters with (kept for this visit only) */
+$("upC").addEventListener("change",async()=>{const f=$("upC").files&&$("upC").files[0];if(!f)return;
+  try{calImg=await createImageBitmap(f);$("upCName").textContent=f.name;S.cFill="image";syncUI();schedule();toast("圖片已填進字裡："+f.name);}
+  catch(e){toast("這張圖片讀不進來，請換 JPG 或 PNG");}});
+$("pReset").addEventListener("click",()=>{Object.assign(S,PUFFY_SET);syncUI();schedule();toast("膨膨字的立體感已回到預設");});
+$("save").addEventListener("click",()=>{try{localStorage.setItem("chromeTitle.v7",JSON.stringify(S));toast("已記住這組設定");}catch(e){toast("這個瀏覽器不能存設定");}});
+$("reset").addEventListener("click",()=>{S=Object.assign({},DEFAULTS);syncUI();schedule();toast("已回到預設");});
+function toast(m){$("toast").textContent=m;}
+
+let upCount=0;
+/* a .ttc file (most Mac system fonts) holds several fonts and the browser reads only single ones: copy out the first */
+function ttcFirst(buf){
+  const dv=new DataView(buf);if(buf.byteLength<16||dv.getUint32(0)!==0x74746366)return buf;
+  const off=dv.getUint32(12),nt=dv.getUint16(off+4),ib=new Uint8Array(buf),recs=[];
+  for(let i=0;i<nt;i++){const r=off+12+i*16;recs.push([dv.getUint32(r),dv.getUint32(r+4),dv.getUint32(r+8),dv.getUint32(r+12)]);}
+  let size=12+nt*16;for(const r of recs)size+=(r[3]+3)&~3;
+  const out=new ArrayBuffer(size),od=new DataView(out),ob=new Uint8Array(out);
+  ob.set(ib.subarray(off,off+12),0);let p=12+nt*16;
+  recs.forEach((r,i)=>{const q=12+i*16;od.setUint32(q,r[0]);od.setUint32(q+4,r[1]);od.setUint32(q+8,p);od.setUint32(q+12,r[3]);ob.set(ib.subarray(r[2],r[2]+r[3]),p);p+=(r[3]+3)&~3;});
+  return out;
+}
+function hookUpload(inp,selId,nameId){
+  inp.addEventListener("change",async()=>{const f=inp.files&&inp.files[0];if(!f)return;
+    try{const buf=ttcFirst(await f.arrayBuffer());const fam="UserFont"+(++upCount);const ff=new FontFace(fam,buf);await ff.load();document.fonts.add(ff);
+      const sel=$(selId);const o=document.createElement("option");o.value=fam+"|400";o.textContent="上傳："+f.name;sel.appendChild(o);sel.value=o.value;
+      S[selId]=o.value;$(nameId).textContent=f.name;schedule();toast("字型已載入："+f.name);}
+    catch(e){toast("這個字型檔讀不進來，請換 .ttf、.otf、.ttc 或 .woff 字型檔");}});
+}
+hookUpload($("upT"),"tFont","upTName");hookUpload($("upS"),"sFont","upSName");
+
+/* ---------- tileable noise texture for the soft reflections ---------- */
+const NT=256,noiseTex=new Float32Array(NT*NT);
+(function(){
+  function hash(i,j,s){let h=(i*374761393+j*668265263+s*1442695041)|0;h=Math.imul(h^(h>>>13),1274126177);h^=h>>>16;return (h>>>0)/4294967295;}
+  const oct=[[4,1],[8,.55],[16,.28],[32,.14]];let norm=0;for(const o of oct)norm+=o[1];
+  for(let y=0;y<NT;y++)for(let x=0;x<NT;x++){let v=0;
+    for(let k=0;k<oct.length;k++){const P=oct[k][0],u=x/NT*P,w=y/NT*P;const xi=Math.floor(u),yi=Math.floor(w);let fx=u-xi,fy=w-yi;fx=fx*fx*(3-2*fx);fy=fy*fy*(3-2*fy);
+      const a=hash(xi%P,yi%P,k),b=hash((xi+1)%P,yi%P,k),c=hash(xi%P,(yi+1)%P,k),d=hash((xi+1)%P,(yi+1)%P,k);
+      v+=oct[k][1]*(a+(b-a)*fx+(c-a)*fy+(a-b-c+d)*fx*fy);}
+    noiseTex[y*NT+x]=(v/norm-.5)*2;}
+  let mx=0;for(let i=0;i<noiseTex.length;i++)mx=Math.max(mx,Math.abs(noiseTex[i]));for(let i=0;i<noiseTex.length;i++)noiseTex[i]/=mx;
+})();
+function noise2(u,v){
+  const ui=Math.floor(u),vi=Math.floor(v),fu=u-ui,fv=v-vi;
+  const x0=ui&255,x1=(ui+1)&255,y0=(vi&255)<<8,y1=((vi+1)&255)<<8;
+  return (noiseTex[y0+x0]*(1-fu)+noiseTex[y0+x1]*fu)*(1-fv)+(noiseTex[y1+x0]*(1-fu)+noiseTex[y1+x1]*fu)*fv;
+}
+
+/* ---------- outline of the ink ----------
+   The anti-aliased glyph mask is turned back into polygons: marching squares at 50 % coverage, then simplified
+   into straight segments. The chisel is computed from these segments, so cuts are exact at any angle.
+   Pixel (x,y) has its centre at (x,y). The ink is on the left of the direction of travel: the inward normal of
+   a segment with direction (ux,uy) is (uy,-ux). */
+function traceOutline(A,w,h){
+  const next=new Map();
+  for(let y=0;y<h-1;y++){const r=y*w;
+    for(let x=0;x<w-1;x++){const i=r+x;
+      const tl=A[i]>=.5,tr=A[i+1]>=.5,bl=A[i+w]>=.5,br=A[i+w+1]>=.5;
+      if(tl===tr&&tr===br&&br===bl)continue;
+      // cell edges walked clockwise: top, right, bottom, left. out->in = the outline enters the cell there.
+      const eT=2*i,eR=2*(i+1)+1,eB=2*(i+w),eL=2*i+1;
+      let n1=-1,n2=-1,x1=-1,x2=-1;
+      if(tl!==tr){if(tl)x1=eT;else n1=eT;}
+      if(tr!==br){if(tr){if(x1<0)x1=eR;else x2=eR;}else{if(n1<0)n1=eR;else n2=eR;}}
+      if(br!==bl){if(br){if(x1<0)x1=eB;else x2=eB;}else{if(n1<0)n1=eB;else n2=eB;}}
+      if(bl!==tl){if(bl){if(x1<0)x1=eL;else x2=eL;}else{if(n1<0)n1=eL;else n2=eL;}}
+      if(n2<0)next.set(n1,x1);
+      else{const c=(A[i]+A[i+1]+A[i+w]+A[i+w+1])*.25>=.5;
+        if(tl){if(c){next.set(eR,eT);next.set(eL,eB);}else{next.set(eL,eT);next.set(eR,eB);}}
+        else{if(c){next.set(eT,eL);next.set(eB,eR);}else{next.set(eT,eR);next.set(eB,eL);}}}
+    }}
+  const loops=[];
+  for(const k0 of Array.from(next.keys())){
+    if(!next.has(k0))continue;
+    const xs=[],ys=[];let e=k0;
+    while(e!==undefined&&next.has(e)){
+      const idx=e>>1,x=idx%w,y=(idx-x)/w;
+      if(e&1){const a0=A[idx],a1=A[idx+w];xs.push(x);ys.push(y+(.5-a0)/(a1-a0));}
+      else{const a0=A[idx],a1=A[idx+1];xs.push(x+(.5-a0)/(a1-a0));ys.push(y);}
+      const nx=next.get(e);next.delete(e);e=nx;}
+    if(xs.length>=3)loops.push([xs,ys]);
+  }
+  return loops;
+}
+function simplifyLoop(xs,ys,eps){
+  const n=xs.length;
+  let far=0,fd=-1;for(let i=1;i<n;i++){const d=(xs[i]-xs[0])*(xs[i]-xs[0])+(ys[i]-ys[0])*(ys[i]-ys[0]);if(d>fd){fd=d;far=i;}}
+  const keep=new Uint8Array(n);keep[0]=1;keep[far]=1;
+  const stack=[0,far,far,n];
+  while(stack.length){const b=stack.pop(),a=stack.pop();if(b-a<2)continue;
+    const ax=xs[a],ay=ys[a],bx=xs[b%n],by=ys[b%n];let dx=bx-ax,dy=by-ay;const L=Math.sqrt(dx*dx+dy*dy);
+    let md=-1,mi=-1;
+    if(L<1e-9){for(let i=a+1;i<b;i++){const d=Math.abs(xs[i]-ax)+Math.abs(ys[i]-ay);if(d>md){md=d;mi=i;}}}
+    else{dx/=L;dy/=L;for(let i=a+1;i<b;i++){const d=Math.abs((xs[i]-ax)*dy-(ys[i]-ay)*dx);if(d>md){md=d;mi=i;}}}
+    if(md>eps){keep[mi]=1;stack.push(a,mi,mi,b);}}
+  let X=[],Y=[];for(let i=0;i<n;i++)if(keep[i]){X.push(xs[i]);Y.push(ys[i]);}
+  // the two starting points were arbitrary: drop them if they sit on a straight run
+  for(let pass=0;pass<2&&X.length>3;pass++){
+    for(let k=0;k<X.length&&X.length>3;k++){const m=X.length,a=(k+m-1)%m,c=(k+1)%m;
+      const dx=X[c]-X[a],dy=Y[c]-Y[a],L=Math.sqrt(dx*dx+dy*dy);if(L<1e-9)continue;
+      const d=Math.abs((X[k]-X[a])*dy-(Y[k]-Y[a])*dx)/L,dt=(X[k]-X[a])*(X[c]-X[k])+(Y[k]-Y[a])*(Y[c]-Y[k]);
+      if(d<eps*.7&&dt>0){X.splice(k,1);Y.splice(k,1);k--;}}}
+  return [X,Y];
+}
+function buildSegments(loops,eps){
+  const simp=[];let N=0;
+  for(const [xs,ys] of loops){const s=simplifyLoop(xs,ys,eps);if(s[0].length>=3){simp.push(s);N+=s[0].length;}}
+  const G={n:N,x0:new Float32Array(N),y0:new Float32Array(N),dx:new Float32Array(N),dy:new Float32Array(N),il:new Float32Array(N),
+    ux:new Float32Array(N),uy:new Float32Array(N),len:new Float32Array(N),nxt:new Int32Array(N)};
+  let k=0;G.loops=[];
+  for(const [X,Y] of simp){const m=X.length,base=k;G.loops.push([base,m]);
+    for(let j=0;j<m;j++,k++){const j2=(j+1)%m,dx=X[j2]-X[j],dy=Y[j2]-Y[j],L=Math.sqrt(dx*dx+dy*dy)||1e-6;
+      G.x0[k]=X[j];G.y0[k]=Y[j];G.dx[k]=dx;G.dy[k]=dy;G.il[k]=1/(L*L);G.ux[k]=dx/L;G.uy[k]=dy/L;G.len[k]=L;G.nxt[k]=base+j2;}}
+  return G;
+}
+
+/* ---------- stroke weight ----------
+   Strokes are thickened on the outline itself: every straight edge is pushed outwards, by gx px sideways and
+   gy px up/down, and stays straight. An edge that faces another stroke only moves until the gap between them
+   is gmin px, so dense characters do not clog. q (0..1) evens the weight out over the line: no edge moves more
+   than the q-quantile of what the edges allow. Works with any font. */
+function growOutline(A,w,h,gx,gy,gmin,q){
+  if(gx<=.05&&gy<=.05)return {A,capX:0,capY:0};
+  const G=buildSegments(traceOutline(A,w,h),.12),ns=G.n;
+  if(!ns)return {A,capX:0,capY:0};
+  const X0=G.x0,Y0=G.y0,UX=G.ux,UY=G.uy,LEN=G.len,DX=G.dx,DY=G.dy;
+  const cx=new Float32Array(ns),cy=new Float32Array(ns),kk=new Float32Array(ns).fill(1);
+  for(let s=0;s<ns;s++){const ox=-UY[s],oy=UX[s];              // outward normal
+    cx[s]=ox>.02?gx:ox<-.02?-gx:0;cy[s]=oy>.02?gy:oy<-.02?-gy:0;
+    const L=Math.sqrt(cx[s]*cx[s]+cy[s]*cy[s]);if(L<.05)continue;
+    const rx=cx[s]/L,ry=cy[s]/L,T=2*L+Math.max(gmin,0)+1.5;
+    const m=Math.max(1,Math.round(LEN[s]/2.5));
+    for(let j=0;j<m;j++){const f=m===1?.5:(.75+j*(LEN[s]-1.5)/(m-1))/LEN[s];
+      const sx=X0[s]+DX[s]*f,sy=Y0[s]+DY[s]*f;
+      for(let t=1;t<=T;t+=1){const xx=Math.round(sx+rx*t),yy=Math.round(sy+ry*t);
+        if(xx<0||yy<0||xx>=w||yy>=h)break;
+        if(A[yy*w+xx]>=.5){const al=Math.max(0,(t-.5-gmin)/2)/L;if(al<kk[s])kk[s]=al;break;}}}
+  }
+  let cap=1;
+  if(q>0&&q<1){const hist=new Float64Array(65);let tot=0;
+    for(let s=0;s<ns;s++){if(cx[s]===0&&cy[s]===0)continue;hist[Math.min(64,(kk[s]*64)|0)]+=LEN[s];tot+=LEN[s];}
+    let acc=0;for(let b=0;b<65;b++){acc+=hist[b];if(acc>=tot*q){cap=Math.min(1,(b+.5)/64);break;}}}
+  // pieces of one straight edge move together, by what the most hemmed-in piece allows
+  for(const [base,m] of G.loops){
+    for(let pass=0;pass<2;pass++)for(let dir=0;dir<2;dir++)for(let jj=0;jj<m;jj++){
+      const j=dir?m-1-jj:jj,s=base+j,p=base+(j+m-1)%m;
+      if(UX[p]*UX[s]+UY[p]*UY[s]>.985&&kk[p]!==kk[s]){const mn=kk[p]<kk[s]?kk[p]:kk[s];kk[p]=kk[s]=mn;}}
+  }
+  const cv=document.createElement("canvas");cv.width=w;cv.height=h;const g=cv.getContext("2d",{willReadFrequently:true});
+  g.fillStyle="#fff";g.beginPath();
+  for(const [base,m] of G.loops){
+    // every edge is shifted by its own vector; corners are where the shifted lines meet (mitre), cut flat when the
+    // meeting point would be far away; edges that would turn inside out are dropped
+    let E=[];
+    for(let j=0;j<m;j++){const s=base+j,k=Math.min(kk[s],cap);E.push([X0[s],Y0[s],X0[s]+DX[s],Y0[s]+DY[s],cx[s]*k,cy[s]*k]);}
+    let C=null;
+    for(let round=0;round<6;round++){
+      const n=E.length;if(n<3){C=null;break;}
+      C=new Array(n);
+      for(let j=0;j<n;j++){const e0=E[(j+n-1)%n],e1=E[j];
+        const d0x=e0[2]-e0[0],d0y=e0[3]-e0[1],d1x=e1[2]-e1[0],d1y=e1[3]-e1[1];
+        const l0=Math.sqrt(d0x*d0x+d0y*d0y),l1=Math.sqrt(d1x*d1x+d1y*d1y);
+        const p0x=e0[2]+e0[4],p0y=e0[3]+e0[5],p1x=e1[0]+e1[4],p1y=e1[1]+e1[5];
+        const cr=d0x*d1y-d0y*d1x;
+        if(l0<1e-6||l1<1e-6||Math.abs(cr)<.14*l0*l1){C[j]=Math.abs(p0x-p1x)+Math.abs(p0y-p1y)<.02?[p0x,p0y]:[p0x,p0y,p1x,p1y];continue;}
+        const sx=e0[0]+e0[4],sy=e0[1]+e0[5],t=((p1x-sx)*d1y-(p1y-sy)*d1x)/cr,qx=sx+t*d0x,qy=sy+t*d0y;
+        const lim=2*Math.max(Math.abs(e0[4])+Math.abs(e0[5]),Math.abs(e1[4])+Math.abs(e1[5]))+.5;
+        if(Math.abs(qx-p0x)+Math.abs(qy-p0y)>lim&&Math.abs(qx-p1x)+Math.abs(qy-p1y)>lim)C[j]=[p0x,p0y,p1x,p1y];else C[j]=[qx,qy];}
+      const rm=new Uint8Array(n);let any=false;
+      for(let j=0;j<n;j++){const e=E[j],a=C[j],b=C[(j+1)%n],ax=a[a.length-2],ay=a[a.length-1];
+        if((b[0]-ax)*(e[2]-e[0])+(b[1]-ay)*(e[3]-e[1])<-1e-4&&!rm[(j+n-1)%n]&&!(j===n-1&&rm[0])){rm[j]=1;any=true;}}
+      if(!any)break;
+      E=E.filter((e,j)=>!rm[j]);
+    }
+    if(!C)continue;
+    let first=true;
+    for(const c of C)for(let i=0;i<c.length;i+=2){if(first){g.moveTo(c[i]+.5,c[i+1]+.5);first=false;}else g.lineTo(c[i]+.5,c[i+1]+.5);}
+    g.closePath();}
+  g.fill("nonzero");
+  const px=g.getImageData(0,0,w,h).data,O=new Float32Array(w*h);
+  for(let i=0;i<O.length;i++){const v=px[i*4+3]/255;O[i]=v>A[i]?v:A[i];}
+  return {A:O,capX:gx*cap,capY:gy*cap};
+}
+
+/* ---------- chisel depth ----------
+   Depth below the surface = distance to the outline, signed (positive inside, negative outside, clamped at
+   -lim). Inner corners are mitred like a cut gem: there the two cuts simply continue until they meet, instead
+   of the round fan a plain distance would give. Everything is done upright; the slant comes last. */
+function nearestSeg(A,w,h,G,lim){
+  const n=w*h,seg=new Int32Array(n).fill(-1),d2=new Float32Array(n).fill(1e30),lim2=lim*lim;
+  const X0=G.x0,Y0=G.y0,DX=G.dx,DY=G.dy,IL=G.il,LEN=G.len;
+  for(let s=0;s<G.n;s++){const steps=Math.max(1,Math.ceil(LEN[s]*2));
+    for(let k=0;k<=steps;k++){const t=k/steps,px=X0[s]+DX[s]*t,py=Y0[s]+DY[s]*t,bx=Math.floor(px),by=Math.floor(py);
+      for(let yy=by-1;yy<=by+2;yy++){if(yy<0||yy>=h)continue;
+        for(let xx=bx-1;xx<=bx+2;xx++){if(xx<0||xx>=w)continue;const i=yy*w+xx;
+          let u=((xx-X0[s])*DX[s]+(yy-Y0[s])*DY[s])*IL[s];u=u<0?0:u>1?1:u;
+          const ex=X0[s]+u*DX[s]-xx,ey=Y0[s]+u*DY[s]-yy,v=ex*ex+ey*ey;
+          if(v<d2[i]){d2[i]=v;seg[i]=s;}}}}}
+  function relax(i,xx,yy,j){const c=seg[j];if(c<0||c===seg[i])return;
+    let u=((xx-X0[c])*DX[c]+(yy-Y0[c])*DY[c])*IL[c];u=u<0?0:u>1?1:u;
+    const ex=X0[c]+u*DX[c]-xx,ey=Y0[c]+u*DY[c]-yy,v=ex*ex+ey*ey;
+    if(v<d2[i]&&(v<=lim2||A[i]>0)){d2[i]=v;seg[i]=c;}}
+  for(let pass=0;pass<2;pass++){
+    for(let yy=1;yy<h-1;yy++){const r=yy*w;
+      for(let xx=1;xx<w-1;xx++){const i=r+xx;relax(i,xx,yy,i-1);relax(i,xx,yy,i-w-1);relax(i,xx,yy,i-w);relax(i,xx,yy,i-w+1);}
+      for(let xx=w-2;xx>0;xx--){const i=r+xx;relax(i,xx,yy,i+1);}}
+    for(let yy=h-2;yy>0;yy--){const r=yy*w;
+      for(let xx=w-2;xx>0;xx--){const i=r+xx;relax(i,xx,yy,i+1);relax(i,xx,yy,i+w+1);relax(i,xx,yy,i+w);relax(i,xx,yy,i+w-1);}
+      for(let xx=1;xx<w-1;xx++){const i=r+xx;relax(i,xx,yy,i-1);}}
+  }
+  return {seg,d2};
+}
+function roofField(A,w,h,G,lim){
+  const n=w*h,D=new Float32Array(n);
+  if(!G.n){for(let i=0;i<n;i++)D[i]=A[i]>=.5?1:-lim;return {D,max:1};}
+  const {seg,d2}=nearestSeg(A,w,h,G,lim);
+  const X0=G.x0,Y0=G.y0,DX=G.dx,DY=G.dy,IL=G.il,UX=G.ux,UY=G.uy,LEN=G.len,NXT=G.nxt;
+  let dmax=0;
+  for(let yy=0;yy<h;yy++){const r=yy*w;
+    for(let xx=0;xx<w;xx++){const i=r+xx,s=seg[i];
+      if(s<0){D[i]=A[i]>=.5?0:-lim;continue;}
+      const u=((xx-X0[s])*DX[s]+(yy-Y0[s])*DY[s])*IL[s];let d;
+      if(u>0&&u<1)d=(xx-X0[s])*UY[s]-(yy-Y0[s])*UX[s];        // signed distance to the segment's line
+      else{d=Math.sqrt(d2[i]);if(A[i]<.5)d=-d;}
+      if(d<-lim)d=-lim;D[i]=d;if(d>dmax)dmax=d;}}
+  // mitre the sharp inner corners
+  const R=dmax+1,LMIN=3;
+  for(let a=0;a<G.n;a++){
+    if(LEN[a]<LMIN)continue;
+    let b=NXT[a],acc=0,ok=true;
+    while(LEN[b]<LMIN){acc+=LEN[b];if(acc>3.2||b===a){ok=false;break;}b=NXT[b];}
+    if(!ok||b===a)continue;
+    const uax=UX[a],uay=UY[a],ubx=UX[b],uby=UY[b];
+    const cr=uax*uby-uay*ubx,ang=Math.atan2(cr,uax*ubx+uay*uby);
+    if(ang<.49||ang>2.9)continue;                               // inner corners between 28 and 166 degrees
+    let vx=X0[a]+DX[a],vy=Y0[a]+DY[a];
+    if(NXT[a]!==b){const s=((X0[b]-vx)*uby-(Y0[b]-vy)*ubx)/cr;vx+=uax*s;vy+=uay*s;}
+    const n1x=uay,n1y=-uax,n2x=uby,n2y=-ubx;
+    let bxs=n1x+n2x,bys=n1y+n2y;const nb=Math.sqrt(bxs*bxs+bys*bys)||1e-6;
+    const reach=Math.min(R*nb/(1+n1x*n2x+n1y*n2y),2.94*R);bxs=bxs/nb*reach;bys=bys/nb*reach;
+    let xa=Math.min(vx,vx+R*n1x,vx+R*n2x,vx+bxs),xb=Math.max(vx,vx+R*n1x,vx+R*n2x,vx+bxs);
+    let ya=Math.min(vy,vy+R*n1y,vy+R*n2y,vy+bys),yb=Math.max(vy,vy+R*n1y,vy+R*n2y,vy+bys);
+    xa=Math.max(1,Math.floor(xa));xb=Math.min(w-2,Math.ceil(xb));ya=Math.max(1,Math.floor(ya));yb=Math.min(h-2,Math.ceil(yb));
+    for(let yy=ya;yy<=yb;yy++){const r=yy*w,py=yy-vy;
+      for(let xx=xa;xx<=xb;xx++){const i=r+xx,cur=D[i];if(cur<=0)continue;
+        const px=xx-vx;
+        if(px*uax+py*uay<0||px*ubx+py*uby>0)continue;
+        const d1=px*n1x+py*n1y,d2v=px*n2x+py*n2y;let m=d1>d2v?d1:d2v;
+        const rr=Math.sqrt(px*px+py*py);if(rr*.34>m)m=rr*.34;
+        if(m>=cur)continue;
+        // only where the corner can be seen through the ink: the cut must not jump a slit to the next stroke
+        let vis=true;const nq=Math.ceil(rr/1.1);
+        for(let q=1;q<nq;q++){const t=q/nq;if(t*rr<.9)continue;
+          if(A[Math.round(vy+py*t)*w+Math.round(vx+px*t)]<.5){vis=false;break;}}
+        if(vis)D[i]=m;}}
+  }
+  return {D,max:dmax};
+}
+/* gaussian-like blur: three box passes */
+function boxH(S,T,w,h,r){const k=1/(2*r+1);
+  for(let y=0;y<h;y++){const o=y*w;let acc=0;
+    for(let x=-r;x<=r;x++)acc+=S[o+(x<0?0:x>=w?w-1:x)];
+    for(let x=0;x<w;x++){T[o+x]=acc*k;const xa=x+r+1,xb=x-r;acc+=S[o+(xa<w?xa:w-1)]-S[o+(xb>0?xb:0)];}}}
+function boxV(S,T,w,h,r){const k=1/(2*r+1),acc=new Float64Array(w);
+  for(let y=-r;y<=r;y++){const o=(y<0?0:y>=h?h-1:y)*w;for(let x=0;x<w;x++)acc[x]+=S[o+x];}
+  for(let y=0;y<h;y++){const o=y*w,ya=y+r+1,yb=y-r,oa=(ya<h?ya:h-1)*w,ob=(yb>0?yb:0)*w;
+    for(let x=0;x<w;x++){T[o+x]=acc[x]*k;acc[x]+=S[oa+x]-S[ob+x];}}}
+function gauss(D,w,h,sigma){
+  if(sigma<.45)return D;
+  let wl=Math.floor(Math.sqrt(12*sigma*sigma/3+1));if(wl%2===0)wl--;
+  const m=Math.round((12*sigma*sigma-3*wl*wl-12*wl-9)/(-4*wl-4));
+  const T1=new Float32Array(D.length),T2=new Float32Array(D.length);let src=D,did=false;
+  for(let i=0;i<3;i++){const r=((i<m?wl:wl+2)-1)>>1;if(r<1)continue;boxH(src,T1,w,h,r);boxV(T1,T2,w,h,r);src=T2;did=true;}
+  return did?T2:D;
+}
+/* slant + box-filter downsample in one pass: x' = x - t*(y-base), then divide by ss */
+function shearDown(px,w,h,ss,t,base){
+  const s0=t*base,s1=s0-t*h,padL=-Math.floor(Math.min(s0,s1)),Ws=w+Math.ceil(Math.max(s0,s1))+padL+2;
+  const Wo=Math.ceil(Ws/ss),Ho=Math.ceil(h/ss);
+  const out=new Uint8ClampedArray(Wo*Ho*4),acc=new Float64Array(Wo*4),P=new Float64Array((w+1)*4);
+  const cl=v=>v<0?0:v>w?w:v;
+  for(let Y=0;Y<Ho;Y++){
+    acc.fill(0);
+    for(let j=0;j<ss;j++){const y=Y*ss+j;if(y>=h)break;
+      const s=s0-t*y+padL,si=Math.floor(s),f=s-si,r=y*w*4;
+      let p0=0,p1=0,p2=0,p3=0;
+      for(let x=0;x<w;x++){const k=r+x*4,a=px[k+3];if(a){const q=a/255;p0+=px[k]*q;p1+=px[k+1]*q;p2+=px[k+2]*q;p3+=a;}
+        const o=(x+1)*4;P[o]=p0;P[o+1]=p1;P[o+2]=p2;P[o+3]=p3;}
+      if(p3===0)continue;
+      for(let X=0;X<Wo;X++){const b=X*ss-si;if(b+ss<0||b-1>w)continue;
+        const lo=cl(b)*4,hi=cl(b+ss)*4,lo1=cl(b-1)*4,hi1=cl(b+ss-1)*4,o=X*4,g=1-f;
+        acc[o]+=g*(P[hi]-P[lo])+f*(P[hi1]-P[lo1]);acc[o+1]+=g*(P[hi+1]-P[lo+1])+f*(P[hi1+1]-P[lo1+1]);
+        acc[o+2]+=g*(P[hi+2]-P[lo+2])+f*(P[hi1+2]-P[lo1+2]);acc[o+3]+=g*(P[hi+3]-P[lo+3])+f*(P[hi1+3]-P[lo1+3]);}
+    }
+    const ro=Y*Wo*4,inv=1/(ss*ss);
+    for(let X=0;X<Wo;X++){const o=X*4,a=acc[o+3];if(a<=0)continue;const k=255/a;
+      out[ro+o]=acc[o]*k;out[ro+o+1]=acc[o+1]*k;out[ro+o+2]=acc[o+2]*k;out[ro+o+3]=a*inv;}
+  }
+  return {data:out,w:Wo,h:Ho};
+}
+
+/* 16 fixed directions for the streak texture (the across-stroke axis, every 11.25 degrees) */
+const OC=new Float32Array(16),OS=new Float32Array(16);for(let k=0;k<16;k++){OC[k]=Math.cos(k*Math.PI/16);OS[k]=Math.sin(k*Math.PI/16);}
+
+/* ---------- one chiselled metal text line ---------- */
+const measure=document.createElement("canvas").getContext("2d");
+function stack(family){return `"${family}", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif`;}
+/* text layout: whole characters (accents, emoji sequences and variation selectors stay with their character),
+   full-width letters and digits typed with a Chinese input method become ordinary ones, the title's letter-spacing is
+   used in full only between two full-width characters (less next to a letter or digit, almost none inside a Latin
+   word), full-width punctuation is squeezed to its own ink, and a run of dashes stays one line.
+   kt: share of the letter-spacing between [two full-width, mixed, two narrow] characters; null spaces every pair
+   alike and squeezes nothing (an English subtitle). A subtitle that holds Chinese keeps its wide spacing for the
+   English letters only. */
+const SQ="「『（《〈【〔｛［“‘」』）》〉】〕｝］”’，、。．：；！？…⋯‧・";
+const DASH="—―─";
+function normText(t){return t.normalize("NFC").replace(/[\uFF10-\uFF19\uFF21-\uFF3A\uFF41-\uFF5A]/g,c=>String.fromCharCode(c.charCodeAt(0)-0xFEE0));}
+let SEG=null;try{SEG=new Intl.Segmenter("zh-Hant",{granularity:"grapheme"});}catch(e){}
+function segs(t){t=normText(t);return SEG?[...SEG.segment(t)].map(s=>s.segment):[...t];}
+const KT_TITLE=[1,.45,.08],KT_SUB=[.3,.6,1];
+function layoutLine(text,fs,hs,track,kt){       // measure.font must be set; positions in px
+  const cjk=!!kt;
+  const items=[];
+  for(const c of segs(text)){const m=measure.measureText(c);const adv=m.width;let dx=0,w=adv;
+    const l=-(m.actualBoundingBoxLeft||0),r=m.actualBoundingBoxRight||adv,sq=SQ.includes(c),da=DASH.includes(c);
+    if(cjk&&r>l&&(sq||da)){const mg=da?0:fs*(c==="，"||c==="、"?.1:.06);dx=mg-l;w=(r-l)+2*mg;}
+    items.push({c,dx:dx*hs,w:w*hs,wide:cjk?(adv>=fs*.8||sq):true,dash:da});}
+  let x=0;const pos=[];
+  for(let i=0;i<items.length;i++){const it=items[i];pos.push(x+it.dx);x+=it.w;
+    if(i<items.length-1){const nx=items[i+1];let k=1;
+      if(cjk){k=(it.wide&&nx.wide)?kt[0]:(it.wide||nx.wide)?kt[1]:kt[2];if(it.dash&&nx.dash){k=0;x-=fs*.01*hs;}}
+      x+=track*k;}}
+  return {items,pos,width:x};
+}
+function lineWidthAt(o){       // layout width in 1080p px, used for auto-fit
+  measure.font=`${o.weight} ${o.size}px ${stack(o.family)}`;
+  const L=layoutLine(o.text,o.size,o.hscale,o.track*o.size,o.kt!==undefined?o.kt:o.noFace?null:KT_TITLE);
+  return L.width+Math.abs(Math.tan(o.skew*Math.PI/180))*o.size*.92+2*o.growX/1000*o.size;
+}
+let lastInfo={};
+function renderChrome(o,outScale,ss){
+  if(!segs(o.text).length)return null;
+  const SC=outScale*ss,fs=o.size*SC,hs=o.hscale,track=o.track*fs,t=Math.tan(o.skew*Math.PI/180);
+  const font=`${o.weight} ${fs}px ${stack(o.family)}`;
+  measure.font=font;
+  const LY=layoutLine(o.text,fs,hs,track,o.kt!==undefined?o.kt:o.noFace?null:KT_TITLE);
+  const mt=measure.measureText(o.text);
+  const asc=Math.max(mt.actualBoundingBoxAscent||fs*.88,fs*.3),desc=Math.max(mt.actualBoundingBoxDescent||fs*.12,fs*.02);
+  const ex=o.growX/1000*fs,ey=o.growY/1000*fs;
+  const pad=Math.ceil(Math.max(ex,ey)+3*SC+8);
+  const textW=LY.width;
+  const w=Math.ceil(textW+pad*2+fs*.16),h=Math.ceil(asc+desc+pad*2);
+  const cv=document.createElement("canvas");cv.width=w;cv.height=h;const g=cv.getContext("2d",{willReadFrequently:true});
+  const base=pad+asc;
+  g.font=font;g.textBaseline="alphabetic";g.fillStyle="#fff";
+  let x=pad+fs*.08;
+  for(let i=0;i<LY.items.length;i++){g.setTransform(hs,0,0,1,x+LY.pos[i],base);g.fillText(LY.items[i].c,0,0);}
+  g.setTransform(1,0,0,1,0,0);
+  const img=g.getImageData(0,0,w,h),px=img.data,n=w*h;
+  let A=new Float32Array(n);for(let i=0;i<n;i++)A[i]=px[i*4+3]/255;
+  const gr=growOutline(A,w,h,ex,ey,o.autoGap?o.gapMin/1000*fs:-1e9,o.autoGap?o.even:0);A=gr.A;
+  const st=o.style;
+  const sigma=Math.max(.6,o.soft*SC);
+  const G=buildSegments(traceOutline(A,w,h),.3);
+  const rf=roofField(A,w,h,G,3*sigma+6),D=rf.D,Db=gauss(D,w,h,sigma);
+  // typical half stroke width: twice the median depth of the ink (half the width of an even slab)
+  const hist=new Uint32Array(4096);let cnt=0,yT=h,yB=0;
+  for(let y=0;y<h;y++){const r=y*w;let any=false;
+    for(let xx=0;xx<w;xx++){const d=D[r+xx];if(d>0&&A[r+xx]>=.5){hist[d>=511?4095:(d*8)|0]++;cnt++;any=true;}}
+    if(any){if(y<yT)yT=y;yB=y;}}
+  if(!cnt)return null;
+  let acc=0,med=1;for(let b=0;b<4096;b++){acc+=hist[b];if(acc>=cnt*.5){med=(b+.5)/8;break;}}
+  const hw=Math.max(2*med,1.5*SC),half=hw;
+  const M=METALS[o.metal]||METALS.silver;
+  const ow=o.outline*SC;
+  const la=o.light*Math.PI/180,Lx=Math.cos(la),Ly=-Math.sin(la);
+  /* shading table of the look: tone by the direction a facet faces (16 rows of 22.5 degrees, counter-clockwise from
+     "facing right") and by depth below the outline (in typical half stroke widths). Measured on the reference
+     titles with the light at st.light0; the light slider turns the table, the bevel slider stretches its depth. */
+  const TB=st.tab,ND=TB.nd,NDm=ND-1,TT=TB.t,F=TB.flat,INV225=8/Math.PI,rot=(o.light-st.light0)/22.5;
+  const KD=100/(o.bevel*(M.bevelMul||1)*hw),KR=ND/TB.dmax*KD;   // depth in px -> in half widths -> table column
+  const BE=new Float32Array(17);for(let k=0;k<17;k++)BE[k]=st.be[0]-st.be[1]*Math.sin(k*Math.PI/8)+st.be[2]*Math.cos(k*Math.PI/8);   // where the bevel ends and the top begins
+  const EW=st.ew,R0=st.r[0],RK=1/(st.r[1]-st.r[0]);
+  const con=o.contrast/100,mot=o.mottle/100*st.mot,stk=o.mottle/100*st.stk,bnd=o.mottle/100*st.bnd,rdg=o.ridge/100,iyH=1/Math.max(1,yB-yT);
+  const YG=new Float32Array(17);for(let k=0;k<17;k++)YG[k]=TB.yg[k&15]*st.yg*con;const YGT=TB.ygt*st.yg*con,YGQ=TB.ygq*st.yg*con;   // lighter at the top of the line than at the bottom; level tops also along the middle
+  const fL=M._facet,cL=o.noFace?M._facet:M._face,sameLUT=fL===cL;
+  const ns=NT/(2.6*fs),nc=Math.cos(1.05)*ns*3.2,nsn=Math.sin(1.05)*ns*3.2,nc2=Math.cos(1.05)*ns,nsn2=Math.sin(1.05)*ns;   // soft reflections: bands leaning with the slant
+  // texture, laid along the strokes: short brush marks (st.sw wide, st.sl long, in half stroke widths) and wider, longer bands
+  const FA1=64/(st.sw*hw),FL1=64/(st.sl*hw),FA2=64/(st.bw*hw),FL2=64/(st.bl*hw);
+  const OD=st.outD||0;
+  const cld=o.mottle/100*(st.cl||0),FC=64/((st.cs||1.5)*hw);                 // cloudy mottling without direction (the stone-like finish of the hard look)
+  const CR=(st.cr||0)*o.ridge/100,C0=st.crr?st.crr[0]:.06,CK=st.crr?1/(st.crr[1]-st.crr[0]):4.5,rimA=st.rimA==null?.35:st.rimA;   // bright lines along the creases
+  const eo=SC*.45,sig=Math.max(SC*.7,sigma*.8)*KD;
+  const RFA=o.mottle/100*(st.rf||0),RFH=o.mottle/100*(st.rfh||0),RFT=st.rft==null?.35:st.rft,RFG=st.rfg||2.2,FR1=64/((st.rw||.6)*hw),FRL=64/((st.rl||3)*hw);let rfl=0;const RFO=o.mottle/100*(st.rfo||0);
+  const dbg=o.dbg,EV=st.env||null,EVA=EV?EV.ang*Math.PI/180+(o.light-st.light0)*Math.PI/180:0;
+  for(let y=1;y<h-1;y++){const r=y*w,yrel=1-2*(y-yT)*iyH,yq=yrel*yrel-1/3;
+    for(let xx=1;xx<w-1;xx++){const i=r+xx,a=A[i];if(a<=0)continue;
+      const d=D[i]>0?D[i]:0,dn=d*KD;
+      const gx=(Db[i+1]-Db[i-1])*.5,gy=(Db[i+w]-Db[i-w])*.5;
+      const g0=Math.sqrt(gx*gx+gy*gy),gmn=g0>1?1:g0;          // 1 on a flat facet, lower on a crease
+      let E=F,be=BE[0],cosd=0,ar=0,ygv=YGT;
+      if(g0>1e-5){
+        ar=Math.atan2(gy,-gx)*INV225;                          // direction the surface faces, in steps of 22.5 degrees
+        let az=ar-rot;az-=Math.floor(az*.0625)*16;const ai=az|0,i0=ai&15,fa=az-ai,i1=(i0+1)&15;
+        let rr=d*KR-.5;rr=rr<0?0:rr>NDm?NDm:rr;const r0=rr>=NDm?NDm-1:rr|0,fr=rr-r0,b0=i0*ND+r0,b1=i1*ND+r0;
+        const t0=TT[b0]+(TT[b0+1]-TT[b0])*fr,t1=TT[b1]+(TT[b1+1]-TT[b1])*fr;
+        E=t0+(t1-t0)*fa;be=BE[i0]+(BE[i0+1]-BE[i0])*fa;ygv=YG[i0]+(YG[i0+1]-YG[i0])*fa;
+        cosd=-(gx*Lx+gy*Ly)/g0;}
+      let wf=(dn-be)*EW+.5;wf=wf<=0?0:wf>=1?1:wf*wf*(3-2*wf);  // 0 = bevel, 1 = top
+      // answer of the surface to its tilt: full on a facet, the level tone on a rounded ridge
+      let rs=(gmn-R0)*RK;rs=rs<=0?0:rs>=1?1:rs*rs*(3-2*rs);
+      let tone=F+(E-F)*rs;
+      tone=F+(tone-F)*con+(ygv+(YGT-ygv)*wf)*yrel+YGQ*wf*yq;
+      if(EV&&wf>0&&g0>1e-5){
+        // chrome reflection on a slightly domed top: the top tilts towards its nearest edge, more near the edge;
+        // a tilted top mirrors a bright band (horizon) when turned to the key light and a dark band when turned away
+        let s=1-(dn-be)/(EV.dome-be);s=s<0?0:s>1?1:s;s=s*s*(3-2*s);
+        const cf=Math.cos(Math.atan2(gy,-gx)-EVA),q=s*cf;
+        const b1=(q-EV.p)/EV.w,b2=(q+EV.pd)/EV.wd;
+        tone+=wf*con*(EV.amp*Math.exp(-b1*b1)-EV.dk*Math.exp(-b2*b2)+EV.lin*q);}
+      if(cld>0)tone+=cld*(tone<.4?.5+1.25*tone:1)*noise2(xx*FC+5.5,y*FC+77.7);
+      if(stk>0||bnd>0||mot>0||RFA>0){
+        // the marks run along the stroke: two noise fields at the nearest of 16 fixed directions, cross-faded
+        let oo=16-2*ar;oo-=Math.floor(oo*.0625)*16;const oi=oo|0,k0=oi&15,fo=oo-oi,k1=(k0+1)&15;
+        const c0=OC[k0],s0=OS[k0],c1=OC[k1],s1=OS[k1];
+        const u0=xx*c0+y*s0,v0=y*c0-xx*s0,u1=xx*c1+y*s1,v1=y*c1-xx*s1,nf=1/Math.sqrt(1-2*fo*(1-fo));
+        const a0=noise2(u0*FA1+k0*37.3,v0*FL1+k0*11.7),a1=noise2(u1*FA1+k1*37.3,v1*FL1+k1*11.7);
+        const e0=noise2(u0*FA2+k0*17.1+91,v0*FL2+k0*5.3+33),e1=noise2(u1*FA2+k1*17.1+91,v1*FL2+k1*5.3+33);
+        const tw=tone<.5?.35+1.3*tone:1;                       // dark surfaces show less of it
+        tone+=tw*((stk*(a0+(a1-a0)*fo)+bnd*(e0+(e1-e0)*fo))*nf+mot*noise2(xx*nsn+y*nc+11,xx*nc2-y*nsn2+7));
+        if(RFA>0){
+          // reflections of a polished surface: soft patches stretched along the stroke, a different pattern on every
+          // face (by the direction it faces); the brightest parts flare towards white, dark faces show less
+          let fi=Math.round(ar);fi&=15;const ph=fi*29.7+3.1;
+          const r0=noise2(u0*FR1+ph,v0*FRL+ph*.61),r1=noise2(u1*FR1+ph,v1*FRL+ph*.61);let rn=(r0+(r1-r0)*fo)*nf*RFG;
+          const tr=tone<.45?.3+1.55*tone:1;tone+=tr*(RFA*rn-RFO);
+          if(rn>RFT){const q=(rn-RFT)/(1-RFT);rfl=RFH*q*q*tr;}}}
+      // highlights (added towards white)
+      let hl=rfl;rfl=0;const owl=OD>0&&cosd<0?ow*(1-OD*cosd):ow;      // the edge line is wider on the sides turned away from the light
+      if(rdg>0){hl+=.5*rdg*(1-gmn)*(1-wf)*(d>owl+SC?1:0);
+        const dd=(dn-be)/sig;if(dd>-3&&dd<3&&st.eh>0)hl+=st.eh*rdg*Math.exp(-dd*dd)*(cosd>0?.25+.75*cosd:.25);}
+      if(CR>0&&d>owl+SC*.5){let c=(1-gmn-C0)*CK;if(c>0){c=c>=1?1:c*c*(3-2*c);hl+=CR*c;}}
+      if(st.rim>0&&ow>0){const dr=(d-owl-SC*.9)/(SC*.7);if(dr>-3&&dr<3)hl+=st.rim*Math.exp(-dr*dr)*(rimA+(1-rimA)*(cosd>0?cosd:0));}
+      tone=tone<0?0:tone>1?1:tone;
+      const ti=((tone*255)|0)*3;let R,Gc,Bc;
+      if(sameLUT||wf<=0){R=fL[ti];Gc=fL[ti+1];Bc=fL[ti+2];}
+      else if(wf>=1){R=cL[ti];Gc=cL[ti+1];Bc=cL[ti+2];}
+      else{R=fL[ti]+(cL[ti]-fL[ti])*wf;Gc=fL[ti+1]+(cL[ti+1]-fL[ti+1])*wf;Bc=fL[ti+2]+(cL[ti+2]-fL[ti+2])*wf;}
+      if(hl>0){if(hl>1)hl=1;R+=(255-R)*hl;Gc+=(255-Gc)*hl;Bc+=(255-Bc)*hl;}
+      if(ow>0&&d<owl+eo){let k=d<=owl-eo?1:1-(d-owl+eo)/(2*eo);k=k*k*(3-2*k);
+        let q=st.outA+st.outB*tone;q=q<0?0:q>1?1:q;const qi=((q*255)|0)*3;
+        R+=(fL[qi]-R)*k;Gc+=(fL[qi+1]-Gc)*k;Bc+=(fL[qi+2]-Bc)*k;}
+      if(dbg==="depth"){const v=(dn*170)|0;R=v>255?255:v;Gc=((d*2)%16)*16;Bc=128;}
+      else if(dbg==="normal"){R=128-gx/(g0||1)*120;Gc=128-gy/(g0||1)*120;Bc=gmn*255;}
+      else if(dbg==="alpha"){R=Gc=Bc=30;}
+      const j=i*4;px[j]=R;px[j+1]=Gc;px[j+2]=Bc;px[j+3]=a*255;
+    }}
+  for(let i=0;i<n;i++)if(A[i]<=0)px[i*4+3]=0;
+  const bl=(st.blur||0)*(o.blurK==null?1:o.blurK)*SC;
+  if(bl>.45){
+    // a little overall softness, as a real render through a lens has: blur premultiplied colour and alpha together
+    const P=[new Float32Array(n),new Float32Array(n),new Float32Array(n),new Float32Array(n)];
+    for(let i=0;i<n;i++){const a=px[i*4+3]/255;P[3][i]=a;P[0][i]=px[i*4]*a;P[1][i]=px[i*4+1]*a;P[2][i]=px[i*4+2]*a;}
+    const Q=P.map(c=>gauss(c,w,h,bl));
+    for(let i=0;i<n;i++){const a=Q[3][i];if(a<=1e-4){px[i*4+3]=0;continue;}px[i*4]=Q[0][i]/a;px[i*4+1]=Q[1][i]/a;px[i*4+2]=Q[2][i]/a;px[i*4+3]=a*255;}}
+  const sd=shearDown(px,w,h,ss,t,base);
+  let minX=sd.w,maxX=-1,minY=sd.h,maxY=-1;const od=sd.data;
+  for(let y=0;y<sd.h;y++){const r=y*sd.w;for(let xx=0;xx<sd.w;xx++){if(od[(r+xx)*4+3]>8){if(xx<minX)minX=xx;if(xx>maxX)maxX=xx;if(y<minY)minY=y;if(y>maxY)maxY=y;}}}
+  if(maxX<0)return null;
+  const oc=document.createElement("canvas");oc.width=sd.w;oc.height=sd.h;
+  oc.getContext("2d").putImageData(new ImageData(od,sd.w,sd.h),0,0);
+  lastInfo={half:half/SC,capX:gr.capX/fs*1000,capY:gr.capY/fs*1000,segs:G.n};
+  return {canvas:oc,minX,maxX,minY,maxY,base:base/ss,info:lastInfo};
+}
+
+/* ---------- puffy look (膨膨字): a soft inflated plastic body with a thin coloured rim ----------
+   Everything is built from signed distance fields of the glyph mask, so every width is exact at any size:
+   the strokes grow (merging into one rounded slab), convex corners are rounded, the body is inflated into a
+   height field (round shoulders, nearly level top), lit by a key light, a soft white reflector from the other side
+   and a glossy highlight; the rim is the band just outside the body, with a thin darker line on its outside. */
+function edt1(f,n,d,v,z){     // Felzenszwalb & Huttenlocher squared distance transform of one row/column
+  let k=0;v[0]=0;z[0]=-1e20;z[1]=1e20;
+  for(let q=1;q<n;q++){
+    let s=((f[q]+q*q)-(f[v[k]]+v[k]*v[k]))/(2*q-2*v[k]);
+    while(s<=z[k]){k--;s=((f[q]+q*q)-(f[v[k]]+v[k]*v[k]))/(2*q-2*v[k]);}
+    k++;v[k]=q;z[k]=s;z[k+1]=1e20;}
+  k=0;for(let q=0;q<n;q++){while(z[k+1]<q)k++;const dq=q-v[k];d[q]=dq*dq+f[v[k]];}
+}
+function edt(M,w,h,want){      // distance from each pixel to the nearest pixel where M===want
+  const INF=1e20,D=new Float32Array(w*h),m=Math.max(w,h),f=new Float64Array(m),d=new Float64Array(m),v=new Int32Array(m),z=new Float64Array(m+1);
+  for(let x=0;x<w;x++){for(let y=0;y<h;y++)f[y]=M[y*w+x]===want?0:INF;edt1(f,h,d,v,z);for(let y=0;y<h;y++)D[y*w+x]=d[y];}
+  for(let y=0;y<h;y++){const r=y*w;for(let x=0;x<w;x++)f[x]=D[r+x];edt1(f,w,d,v,z);for(let x=0;x<w;x++)D[r+x]=Math.sqrt(d[x]);}
+  return D;
+}
+/* signed distance to the edge of a mask: negative inside, positive outside, the edge half way between pixels;
+   cov (optional) is the anti-aliased coverage, which places the edge between pixels more exactly */
+function sdfOf(M,w,h,cov){
+  const out=edt(M,w,h,1),inn=edt(M,w,h,0),S=new Float32Array(w*h);
+  for(let i=0;i<S.length;i++){
+    if(M[i]){S[i]=.5-inn[i];if(cov&&inn[i]<1.5)S[i]=.5-cov[i];}
+    else{S[i]=out[i]-.5;if(cov&&out[i]<1.5)S[i]=.5-cov[i];}}
+  return S;
+}
+const clamp01=v=>v<0?0:v>1?1:v;
+function rgbOf(h){return hex(h);}
+function mixC(a,b,t){return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t];}
+/* shades of the body colour: shadow side (deeper, more saturated) and lit side (towards a soft pink-white) */
+function puffyShades(body){
+  const c=rgbOf(body),mx=Math.max(...c),mn=Math.min(...c);
+  const dark=c.map(v=>Math.max(0,v*.8-(mx-v)*.12-(mx-mn)*.02));
+  const lite=mixC(c,[255,246,246],.62);
+  return {c,dark,lite};
+}
+function renderPuffy(o,outScale,ss){
+  if(!segs(o.text).length)return null;
+  const SC=outScale*ss,fs=o.size*SC,hs=o.hscale,track=o.track*fs,t=Math.tan(o.skew*Math.PI/180);
+  const font=`${o.weight} ${fs}px ${stack(o.family)}`;
+  measure.font=font;
+  const LY=layoutLine(o.text,fs,hs,track,o.kt!==undefined?o.kt:o.noFace?null:KT_TITLE);
+  const mt=measure.measureText(o.text);
+  const asc=Math.max(mt.actualBoundingBoxAscent||fs*.88,fs*.3),desc=Math.max(mt.actualBoundingBoxDescent||fs*.12,fs*.02);
+  const grow=o.grow/1000*fs,rimW=o.rim/1000*fs,lineW=o.line/1000*fs;
+  const pad=Math.ceil(grow+rimW+lineW+4*SC+10);
+  const slantW=Math.abs(t)*(asc+desc);
+  const w=Math.ceil(LY.width+pad*2+fs*.16+slantW),h=Math.ceil(asc+desc+pad*2);
+  const cv=document.createElement("canvas");cv.width=w;cv.height=h;const g=cv.getContext("2d",{willReadFrequently:true});
+  const base=pad+asc;
+  g.font=font;g.textBaseline="alphabetic";g.fillStyle="#fff";
+  // the slant is drawn straight into the mask, so the light and the rim are worked out on the slanted letters
+  let x0=pad+fs*.08+(t>0?t*asc:-t*desc);
+  for(let i=0;i<LY.items.length;i++){g.setTransform(hs,0,-t,1,x0+LY.pos[i],base);g.fillText(LY.items[i].c,0,0);}
+  g.setTransform(1,0,0,1,0,0);
+  const px=g.getImageData(0,0,w,h).data,n=w*h;
+  const A=new Float32Array(n),M=new Uint8Array(n);
+  for(let i=0;i<n;i++){A[i]=px[i*4+3]/255;M[i]=A[i]>=.5?1:0;}
+  // 1) grow the strokes (a round brush: convex corners come out round), 2) round the remaining corners (opening)
+  const s0=sdfOf(M,w,h,A);
+  const B=new Uint8Array(n);for(let i=0;i<n;i++)B[i]=s0[i]<=grow?1:0;
+  const rc=o.round/1000*fs;let SF;
+  if(rc>.5){const sB=sdfOf(B,w,h,null);const E=new Uint8Array(n);let any=0;for(let i=0;i<n;i++){if(sB[i]<=-rc){E[i]=1;any=1;}}
+    SF=any?sdfOf(E,w,h,null):sB;if(any)for(let i=0;i<n;i++)SF[i]-=rc;}
+  else{SF=new Float32Array(n);for(let i=0;i<n;i++)SF[i]=s0[i]-grow;}
+  // typical half stroke width of the body: twice the median depth
+  const hist=new Uint32Array(4096);let cnt=0;
+  for(let i=0;i<n;i++){const d=-SF[i];if(d>0){hist[d>=511?4095:(d*8)|0]++;cnt++;}}
+  if(!cnt)return null;
+  let acc=0,med=1;for(let b=0;b<4096;b++){acc+=hist[b];if(acc>=cnt*.5){med=(b+.5)/8;break;}}
+  const hw=Math.max(2*med,1.5*SC);
+  // 3) inflate: a round shoulder R wide, then a slightly domed top
+  const R=Math.max(1.5*SC,o.round2/100*hw);
+  let Z=new Float32Array(n);
+  for(let i=0;i<n;i++){const d=-SF[i];if(d<=0){Z[i]=0;continue;}
+    const u=d<R?d/R:1;Z[i]=R*Math.sqrt(1-(1-u)*(1-u))+(d>R?(d-R)*.12:0);}
+  Z=gauss(Z,w,h,Math.max(.9*SC,o.smooth/100*hw));
+  const kz=o.puff/100;
+  // lights: key light from the light angle, 50 degrees up; reflector from the opposite side, low
+  const la=o.light*Math.PI/180,el=50*Math.PI/180,Lx=Math.cos(la)*Math.cos(el),Ly=-Math.sin(la)*Math.cos(el),Lz=Math.sin(el);
+  const er=18*Math.PI/180,Rx=-Math.cos(la)*Math.cos(er),Ry=Math.sin(la)*Math.cos(er),Rz=Math.sin(er);
+  let Hx=Lx,Hy=Ly,Hz=Lz+1;const hn=Math.hypot(Hx,Hy,Hz);Hx/=hn;Hy/=hn;Hz/=hn;
+  const gl=o.gloss/100,sp=o.spec/100,rf=o.refl/100,shd=o.shade/100;
+  const pexp=4+60*Math.pow(1-clamp01(gl),1.6)+6;        // broader highlight when "gloss size" is large
+  const P=puffyShades(o.body),rimC=rgbOf(o.rimColor),lineC=rgbOf(o.lineColor);
+  const rimDark=mixC(rimC,lineC,.55);
+  // where the body throws a little shadow onto the rim (away from the light)
+  const so=Math.max(1,.35*rimW+1.2*SC),bodyA=new Float32Array(n);
+  for(let i=0;i<n;i++)bodyA[i]=clamp01(.5-SF[i]);
+  let SH=new Float32Array(n);const ox=Math.round(-Math.cos(la)*so),oy=Math.round(Math.sin(la)*so);
+  for(let y=0;y<h;y++){const yy=y-oy;if(yy<0||yy>=h)continue;for(let x=0;x<w;x++){const xx=x-ox;if(xx>=0&&xx<w)SH[y*w+x]=bodyA[yy*w+xx];}}
+  SH=gauss(SH,w,h,Math.max(.8,.5*so));
+  const out=new Uint8ClampedArray(n*4),aa=.5;
+  for(let y=1;y<h-1;y++){const r=y*w;
+    for(let x=1;x<w-1;x++){const i=r+x,s=SF[i];
+      const aOuter=clamp01(aa-(s-rimW-lineW)),aRim=clamp01(aa-(s-rimW)),aBody=clamp01(aa-s);
+      if(aOuter<=0)continue;
+      // rim: flat, a touch lighter in its middle, shaded where the body overhangs it
+      let c=lineC;
+      if(aRim>0){const mid=rimW>1?clamp01(1-Math.abs((s-rimW*.5)/(rimW*.5+.5))):1;
+        let rc_=mixC(rimC,[255,252,236],.18*mid);rc_=mixC(rc_,rimDark,.5*SH[i]*(o.rimShade/100));
+        c=mixC(lineC,rc_,aRim);}
+      if(aBody>0){
+        const zx=(Z[i+1]-Z[i-1])*.5*kz,zy=(Z[i+w]-Z[i-w])*.5*kz,nl=1/Math.sqrt(zx*zx+zy*zy+1);
+        const nx=-zx*nl,ny=-zy*nl,nz=nl;
+        const lam=nx*Lx+ny*Ly+nz*Lz-Lz;                      // 0 on the level top, + facing the light, - away
+        let col;
+        if(lam<0)col=mixC(P.c,P.dark,clamp01(-lam*1.25*shd));
+        else col=mixC(P.c,P.lite,clamp01(lam*1.35*shd));
+        // reflector: a soft white card on the other side brightens the shoulders turned away from the key light
+        const rr=nx*Rx+ny*Ry+nz*Rz-Rz;if(rr>0&&rf>0)col=mixC(col,P.lite,clamp01(rr*rr*1.6*rf));
+        // glossy highlight (Blinn), pink-white
+        const nh=nx*Hx+ny*Hy+nz*Hz,spec=sp*Math.pow(nh>0?nh:0,pexp)*(1-Math.pow(nz,24)*.85);
+        if(spec>0)col=mixC(col,[255,250,252],clamp01(spec*1.3));
+        // the very edge of the body rolls under: a thin deeper line against the rim
+        const ed=-s;if(ed<1.6*SC){const k=clamp01(1-ed/(1.6*SC))*.35*shd;col=mixC(col,P.dark,k);}
+        c=mixC(c,col,aBody);}
+      const j=i*4;out[j]=c[0];out[j+1]=c[1];out[j+2]=c[2];out[j+3]=aOuter*255;}}
+  const sd=shearDown(out,w,h,ss,0,base);
+  let minX=sd.w,maxX=-1,minY=sd.h,maxY=-1;const od=sd.data;
+  for(let y=0;y<sd.h;y++){const r=y*sd.w;for(let xx=0;xx<sd.w;xx++){if(od[(r+xx)*4+3]>8){if(xx<minX)minX=xx;if(xx>maxX)maxX=xx;if(y<minY)minY=y;if(y>maxY)maxY=y;}}}
+  if(maxX<0)return null;
+  const oc=document.createElement("canvas");oc.width=sd.w;oc.height=sd.h;
+  oc.getContext("2d").putImageData(new ImageData(od,sd.w,sd.h),0,0);
+  return {canvas:oc,minX,maxX,minY,maxY,base:base/ss,info:{half:hw/SC}};
+}
+/* ---------- 書法字: brush lettering filled with a smooth metal gradient ----------
+   Measured on the reference 「史上最強 六月季」: no bevel and no picture inside the letters, one vertical gradient per
+   line over the ink (near white in the upper half, then down to mid grey at the foot), a faint darker rim and a soft
+   dark glow behind. The glyph shapes come from the brush font itself (莫大毛筆 Bakudai, OFL).
+   Every metal gives its own gradient: its ramp is read at the tones below, top to bottom. A picture can fill the
+   letters instead (cover-fit over the ink of the line). */
+const BR_TONES=[[0,.985],[.38,.93],[.56,.82],[.78,.66],[1,.5]];      // silver ramp tone ≈ grey level / 250, measured
+let calImg=null;                                                    // uploaded fill picture (ImageBitmap or Image)
+function lutRGB(lut,t){const i=Math.max(0,Math.min(255,Math.round(t*255)))*3;return `rgb(${lut[i]|0},${lut[i+1]|0},${lut[i+2]|0})`;}
+function calStops(metal,o){
+  const m=METALS[metal]||METALS.silver,lut=m._facet,ct=(o.contrast||100)/100,hi=(o.light==null?0:o.light)/100;
+  // contrast spreads the tones away from the top; brightness lifts them all
+  return BR_TONES.map(([p,v])=>[p,Math.max(0,Math.min(1,.985-(.985-v)*ct+hi*.12))]).map(([p,v])=>[p,lutRGB(lut,v)]);
+}
+function renderCal(o,outScale){
+  if(!segs(o.text).length)return null;
+  const SC=outScale,fs=o.size*SC,hs=o.hscale,track=o.track*fs,t=Math.tan(o.skew*Math.PI/180);
+  const font=`${o.weight} ${fs}px ${stack(o.family)}`;
+  measure.font=font;
+  const LY=layoutLine(o.text,fs,hs,track,o.kt!==undefined?o.kt:KT_TITLE);
+  const mt=measure.measureText(o.text);
+  const asc=Math.max(mt.actualBoundingBoxAscent||fs*.88,fs*.3),desc=Math.max(mt.actualBoundingBoxDescent||fs*.12,fs*.02);
+  const bold=Math.max(0,o.bold||0)/1000*fs,glow=Math.max(0,o.glow||0);
+  const gpad=glow>0?fs*(.04+glow/100*.1):0;
+  const pad=Math.ceil(bold+gpad*2+asc*Math.abs(t)+8*SC);
+  const w=Math.ceil(LY.width+pad*2+fs*.16),h=Math.ceil(asc+desc+pad*2),base=pad+asc;
+  const mk=()=>{const c=document.createElement("canvas");c.width=w;c.height=h;return c;};
+  // 1. the letters as a mask, slanted, thickened by a round stroke
+  const M=mk(),g=M.getContext("2d",{willReadFrequently:true});
+  g.font=font;g.textBaseline="alphabetic";g.fillStyle="#fff";g.strokeStyle="#fff";g.lineJoin="round";g.lineWidth=bold*2;
+  const x0=pad+fs*.08;
+  for(let i=0;i<LY.items.length;i++){g.setTransform(hs,0,-t,1,x0+LY.pos[i],base);g.fillText(LY.items[i].c,0,0);if(bold>.2)g.strokeText(LY.items[i].c,0,0);}
+  g.setTransform(1,0,0,1,0,0);
+  const md=g.getImageData(0,0,w,h).data;
+  let minX=w,maxX=-1,minY=h,maxY=-1;
+  for(let y=0;y<h;y++){const r=y*w;for(let x=0;x<w;x++)if(md[(r+x)*4+3]>8){if(x<minX)minX=x;if(x>maxX)maxX=x;if(y<minY)minY=y;if(y>maxY)maxY=y;}}
+  if(maxX<0)return null;
+  // 2. the fill: gradient over the ink of this line, or the uploaded picture
+  let F=mk();const f=F.getContext("2d");
+  const y1=minY,y2=maxY+1;
+  if(o.fill==="image"&&calImg){
+    const iw=calImg.width,ih=calImg.height,bw=maxX-minX+1,bh=y2-y1,k=Math.max(bw/iw,bh/ih);
+    f.drawImage(calImg,minX+(bw-iw*k)/2,y1+(bh-ih*k)/2,iw*k,ih*k);
+  }else{
+    const gr=f.createLinearGradient(0,y1,0,y2);for(const [p,c] of calStops(o.metal,o))gr.addColorStop(p,c);
+    f.fillStyle=gr;f.fillRect(0,0,w,h);
+  }
+  // 3. sheen: a soft lighter band across the upper part, as on polished metal (0 = off)
+  if(o.sheen>0){const sh=f.createLinearGradient(0,y1,0,y2),a=Math.min(1,o.sheen/100)*.55;
+    sh.addColorStop(0,"rgba(255,255,255,0)");sh.addColorStop(.2,`rgba(255,255,255,${a})`);sh.addColorStop(.36,"rgba(255,255,255,0)");
+    f.globalCompositeOperation="screen";f.fillStyle=sh;f.fillRect(0,0,w,h);f.globalCompositeOperation="source-over";}
+  // 4. rim: the edge of each stroke a little darker, so the letters read as solid metal and not as flat paint
+  if(o.rim>0){const R=mk(),r=R.getContext("2d"),rb=Math.max(1,fs*.012*(o.rim/50));
+    r.fillStyle="#000";r.fillRect(0,0,w,h);r.globalCompositeOperation="destination-out";r.filter=`blur(${rb}px)`;r.drawImage(M,0,0);
+    r.filter="none";r.globalCompositeOperation="source-over";
+    f.globalAlpha=Math.min(1,o.rim/100)*.9;f.drawImage(R,0,0);f.globalAlpha=1;}
+  // edge: soften the outline a little, like the reference (a video frame, never razor sharp)
+  let MK=M;if(o.edge>0){MK=mk();const e=MK.getContext("2d");e.filter=`blur(${o.edge/100*fs*.006}px)`;e.drawImage(M,0,0);e.filter="none";}
+  f.globalCompositeOperation="destination-in";f.drawImage(MK,0,0);f.globalCompositeOperation="source-over";
+  // opacity: the reference letters are slightly see-through, so the shot behind tints them (the skin under 「強」)
+  const op=o.opacity==null?1:Math.max(0,Math.min(1,o.opacity/100));
+  if(op<1){const P=mk(),pq=P.getContext("2d");pq.globalAlpha=op;pq.drawImage(F,0,0);F=P;}
+  // 5. a dark glow behind (keeps the letters readable on a busy shot)
+  let out=F;
+  if(glow>0){const O=mk(),q=O.getContext("2d");
+    q.filter=`blur(${gpad*.5}px)`;q.globalAlpha=Math.min(1,glow/100);q.drawImage(M,0,0);
+    q.globalCompositeOperation="source-in";q.fillStyle="#000";q.fillRect(0,0,w,h);
+    q.globalCompositeOperation="destination-out";q.filter="none";q.globalAlpha=1;q.drawImage(MK,0,0);q.globalCompositeOperation="source-over";q.drawImage(F,0,0);out=O;
+    minX=Math.max(0,minX-Math.ceil(gpad));maxX=Math.min(w-1,maxX+Math.ceil(gpad));minY=Math.max(0,minY-Math.ceil(gpad));maxY=Math.min(h-1,maxY+Math.ceil(gpad));}
+  return {canvas:out,minX,maxX,minY,maxY,base,info:{}};
+}
+/* ---------- compose a frame ---------- */
+const HAN=/[\u2E80-\u9FFF\uF900-\uFAFF\uFE30-\uFE4F\uFF00-\uFF60\u{20000}-\u{3134F}]/u;
+const LH=1.14;     // line pitch of a title on several lines, in title sizes
+/* several titles: every line of 主標 is its own picture and line N of 副標 goes with it; "|" breaks one title onto two lines */
+let cur=0,itemOverride=null;
+function itemsAll(){
+  const t=String(S.title||"").split(/\r?\n/),s=String(S.sub||"").split(/\r?\n/),out=[];
+  for(let i=0;i<Math.max(t.length,s.length);i++){const a=(t[i]||"").trim(),b=(s[i]||"").trim();if(a||b)out.push({i,t:a,s:b});}
+  return out;
+}
+function curItem(){if(itemOverride)return itemOverride;const it=itemsAll();if(!it.length)return {i:0,t:"",s:""};cur=Math.min(Math.max(0,cur),it.length-1);return it[cur];}
+const splitTitle=t=>String(t||"").split(/[|｜]/).map(s=>s.trim()).filter(Boolean);
+function titleLines(){return splitTitle(curItem().t);}
+function curSub(){return curItem().s;}
+async function ensureFonts(){
+  const tf=S.tFont.split("|"),sf=S.sFont.split("|"),tt=itemsAll().map(x=>splitTitle(x.t).join("")).join("")||"字";
+  try{await Promise.all([loadBundledFace(tf[0]),loadBundledFace(sf[0])]);
+    const jobs=[document.fonts.load(`${tf[1]} 100px "${tf[0]}"`,tt),document.fonts.load(`${sf[1]} 100px "${sf[0]}"`,S.sub||"A"),
+      document.fonts.load('900 100px "Noto Sans TC"',tt)];
+    if(HAN.test(S.sub))jobs.push(document.fonts.load(`${sf[1]} 100px "Noto Sans TC"`,S.sub));
+    await Promise.all(jobs);}catch(e){}
+  checkWebFonts();
+}
+/* fonts that come from Google Fonts: say so once when they did not arrive, instead of silently drawing a system font */
+const warned=new Set();
+function webFontLoaded(fam){for(const f of document.fonts)if(f.family.replace(/["']/g,"")===fam&&f.status==="loaded")return true;return false;}
+function checkWebFonts(){
+  const need=[],tf=S.tFont.split("|")[0],sf=S.sFont.split("|")[0];
+  if(!BUNDLED[tf]&&!/^UserFont/.test(tf))need.push(tf);
+  if(!BUNDLED[sf]&&!/^UserFont/.test(sf))need.push(sf);
+  if(HAN.test(S.sub))need.push("Noto Sans TC");
+  for(const f of need)if(!warned.has(f)&&!webFontLoaded(f)){warned.add(f);
+    toast(`「${f}」沒有從 Google 字型載入（可能網路擋住了），現在畫出來的是系統字型。可以改用內建字型，或換個網路再試。`);}
+}
+/* which characters each bundled title font has: deflated bitsets over U+0000 to U+3FFFF, filled in by the build */
+let COVER=null;
+(async()=>{try{if(typeof COVER_SRC==="undefined"||!COVER_SRC.sets)return;
+  const sets=await Promise.all(COVER_SRC.sets.map(async b=>{const bin=Uint8Array.from(atob(b),c=>c.charCodeAt(0));
+    return new Uint8Array(await new Response(new Blob([bin]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).arrayBuffer());}));
+  const c={};for(const f in COVER_SRC.fam)c[f]=sets[COVER_SRC.fam[f]];COVER=c;updateMissing();}catch(e){COVER=null;}})();
+function hasGlyph(fam,cp){const b=COVER&&COVER[fam];if(!b)return true;const i=cp>>3;return i<b.length&&((b[i]>>(cp&7))&1)===1;}
+/* name the title characters the chosen font does not have: they are drawn by a plain fallback font */
+function updateMissing(){
+  const el=$("missWarn");if(!el)return;const fam=S.tFont.split("|")[0];
+  if(!COVER||!COVER[fam]){el.textContent="";return;}
+  const miss=[];
+  for(const g of segs(itemsAll().map(x=>splitTitle(x.t).join("")).join(""))){if(!/[\p{L}\p{N}]/u.test(g))continue;if(!hasGlyph(fam,g.codePointAt(0))&&!miss.includes(g))miss.push(g);}
+  el.textContent=miss.length?`「${miss.slice(0,12).join("")}」${miss.length>12?"等字":""}不在這套字型裡，會用一般黑體補上，看起來比較普通。`:"";
+}
+function layers(scale,ss){
+  const tf=S.tFont.split("|"),sf=S.sFont.split("|");
+  const lines=titleLines(),title=lines.join(" "),sub=curSub(),st0=STYLES[S.style]||STYLES.soft,st=S.stx?Object.assign({},st0,S.stx):st0;
+  const base={metal:S.metal,style:st,light:S.light,contrast:S.contrast,mottle:S.mottle,ridge:S.ridge,soft:S.soft,autoGap:S.autoGap,gapMin:15,even:.42,dbg:S.dbg};
+  const to=Object.assign({text:title,family:tf[0],weight:BUNDLED[tf[0]]?"900":tf[1],size:S.tSize,hscale:S.hscale/100,track:S.tTrack/100,skew:S.skew,
+    growX:S.growX,growY:S.growY,bevel:S.bevel,outline:S.outline},base,
+    // the bar fonts keep their own gaps between strokes; holding gaps open edge by edge leaves small steps where bars cross,
+    // so it is used for them only while their strokes are thickened (without it dense characters run into blobs)
+    {autoGap:S.autoGap&&((tf[0]!==BARH&&tf[0]!==BARU)||S.growX>0||S.growY>0)});
+  // a subtitle with Chinese in it: the Chinese comes from 思源黑體 and is spaced like Chinese; English letters keep the wide spacing
+  const so=Object.assign({text:sub,family:sf[0],weight:sf[1],size:S.sSize,hscale:S.sWide/100,track:S.sTrack/100,skew:0,
+    growX:S.sBold,growY:S.sBold,bevel:100,outline:Math.max(.6,S.outline*.5)},base,{mottle:S.mottle*.5,soft:Math.min(S.soft,.6),autoGap:false,noFace:true,
+    kt:HAN.test(sub)?KT_SUB:null});
+  const lineO=ln=>Object.assign({},to,{text:ln});
+  if(S.autoFit){
+    const maxW=W*.9;
+    if(lines.length){const w=Math.max(...lines.map(ln=>lineWidthAt(lineO(ln))));if(w>maxW)to.size*=maxW/w;}
+    if(sub){let w=lineWidthAt(so);while(w>maxW&&so.track>.06){so.track*=.85;w=lineWidthAt(so);}if(w>maxW)so.size=Math.max(28,so.size*maxW/w);}
+    // a title on several lines must also fit the height of the frame, with the subtitle under it
+    if(lines.length>1){const room=H*.88-(sub?so.size*.8+S.gap:0),hT=to.size*(.9+(lines.length-1)*LH);if(hT>room)to.size*=Math.max(.2,room/hT);}
+    // a title that had to shrink a lot takes the subtitle down with it, so the two stay clearly different in size
+    if(sub&&lines.length&&to.size<S.tSize)so.size=Math.min(so.size,Math.max(28,to.size*.5));
+  }
+  so.outline=Math.min(so.outline,Math.max(.6,so.size*.03));     // a thick outline would fill small letters
+  if(lines.length){const k=Math.pow(to.size/350,.6);to.outline=Math.max(.7,to.outline*k);to.soft=to.soft*Math.max(.5,k);}
+  if(S.effect==="cal"){
+    // 書法字: the same layout, drawn as a brush font filled with a metal gradient; no bevel, outline or stroke growing
+    const cv={metal:S.metal,fill:S.cFill,bold:S.cBold,light:S.cLight,contrast:S.cContrast,sheen:S.cSheen,rim:S.cRim,edge:S.cEdge,opacity:S.cOpacity,glow:S.cGlow,growX:0,growY:0};
+    const ct=ln=>renderCal(Object.assign({},to,cv,{text:ln}),scale);
+    const cs=sub?renderCal(Object.assign({},so,cv,{bold:S.sBold*.2,rim:S.cRim*.5,sheen:0}),scale):null;
+    return {T:lines.map(ct).filter(Boolean),pitch:to.size*LH,Sb:cs};
+  }
+  if(S.effect==="puffy"){
+    // puffy: the same layout, drawn as inflated plastic; the subtitle gets a slimmer rim and a smaller puff
+    const k=to.size/350;
+    const pv={grow:S.pGrow,round:S.pRound,round2:S.pShoulder,puff:S.pPuff,rim:S.pRimW,line:S.pLineW,spec:S.pSpec,gloss:S.pGloss,refl:S.pRefl,
+      shade:S.pShade,smooth:S.pSmooth,rimShade:S.pRimShade,light:S.pLight,body:S.pBody,rimColor:S.pRim,lineColor:S.pLine};
+    const pt=ln=>renderPuffy(Object.assign({},to,pv,{text:ln}),scale,ss);
+    const ps=sub?renderPuffy(Object.assign({},so,pv,{growX:0,growY:0,grow:Math.min(S.pGrow,40)*.6,round:S.pRound*.5,rim:S.pRimW*1.4,line:S.pLineW*1.4}),scale,ss):null;
+    return {T:lines.map(pt).filter(Boolean),pitch:to.size*LH,Sb:ps};
+  }
+  return {T:lines.map(ln=>renderChrome(lineO(ln),scale,ss)).filter(Boolean),pitch:to.size*LH,Sb:sub?renderChrome(so,scale,ss):null};
+}
+function drawLayer(ctx,L,cx,cy,scale,shadowAmt){
+  const bw=L.maxX-L.minX+1,bh=L.maxY-L.minY+1;
+  const dx=Math.round(cx-bw/2-L.minX),dy=Math.round(cy-bh/2-L.minY);
+  ctx.save();
+  if(shadowAmt>0){const la=(S.effect==="puffy"?S.pLight:S.light)*Math.PI/180,off=(4+shadowAmt*.06)*scale;
+    ctx.shadowColor=`rgba(0,0,0,${Math.min(.9,shadowAmt/100*.9)})`;ctx.shadowBlur=(6+shadowAmt*.24)*scale;
+    ctx.shadowOffsetX=-Math.cos(la)*off;ctx.shadowOffsetY=Math.sin(la)*off;}
+  ctx.drawImage(L.canvas,dx,dy);ctx.restore();
+  return {x:dx+L.minX,y:dy+L.minY,w:bw,h:bh};
+}
+const shadowOf=()=>S.effect==="puffy"?S.pShadow:S.effect==="cal"?0:S.shadow;
+function compose(ctx,scale,ss){
+  const {T,Sb,pitch}=layers(scale,ss);
+  // title lines sit on baselines one pitch apart, each centred; the block runs from the top of the ink to its bottom
+  let top=Infinity,bot=-Infinity;
+  T.forEach((L,i)=>{top=Math.min(top,i*pitch+(L.minY-L.base)/scale);bot=Math.max(bot,i*pitch+(L.maxY+1-L.base)/scale);});
+  const th=T.length?bot-top:0,sh=Sb?(Sb.maxY-Sb.minY+1)/scale:0;
+  const gap=T.length&&Sb?S.gap:0;const total=th+gap+sh;
+  let y=(H/2+S.yOff-total/2);
+  const boxes=[],b0=y-top;
+  T.forEach((L,i)=>{const cy=b0+i*pitch+((L.minY+L.maxY+1)/2-L.base)/scale;boxes.push(drawLayer(ctx,L,W/2*scale,cy*scale,scale,shadowOf()));});
+  if(T.length)y+=th+gap;
+  if(Sb){boxes.push(drawLayer(ctx,Sb,W/2*scale,(y+sh/2)*scale,scale,shadowOf()*.6));}
+  return boxes;
+}
+
+/* ---------- preview loop ---------- */
+const view=$("view"),vctx=view.getContext("2d");
+let timer=0,running=false,dirty=false;
+function schedule(fast){
+  clearTimeout(timer);
+  if(fast){if(!running)go(1);else dirty=true;timer=setTimeout(()=>go(2),280);}
+  else timer=setTimeout(()=>go(2),30);
+}
+async function go(ss){
+  if(running){dirty=true;return;}
+  running=true;$("busy").textContent=fontsReady?"預覽中…":"字型載入中…";
+  await ensureFonts();
+  if(ss>=2)await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0)));     // let the label show before the slow render
+  if(itemOverride){running=false;dirty=true;return;}                              // a ZIP is being made: draw again when it is done
+  vctx.clearRect(0,0,W,H);
+  let boxes=[];
+  try{boxes=compose(vctx,1,ss);}catch(e){console.error(e);}
+  $("oob").hidden=!boxes.some(b=>b.x<-1||b.y<-1||b.x+b.w>W+1||b.y+b.h>H+1);
+  updateMissing();
+  running=false;
+  if(dirty){dirty=false;go(2);}else $("busy").textContent=fontsReady?"":"字型載入中…";
+}
+
+/* ---------- export ---------- */
+/* saving goes through the viewer's download capability; where a view has none (or it fails), the picture opens in
+   a box to save with the browser's own "save image" instead */
+let downloads=null;
+const dlP=(async()=>{try{downloads=(window.claude&&await window.claude.use("downloads"))||null;}catch(e){downloads=null;}return downloads;})();
+let saveURL=null,saveURLs=[];
+function showSave(blob,name,many){
+  if(saveURL)URL.revokeObjectURL(saveURL);for(const u of saveURLs)URL.revokeObjectURL(u);saveURLs=[];
+  saveURL=URL.createObjectURL(blob);
+  const isImg=/^image\//.test(blob.type);
+  $("saveImgBox").hidden=!isImg;if(isImg)$("saveImg").src=saveURL;
+  const z=$("saveZip");z.hidden=isImg;z.href=saveURL;z.download=name;
+  $("saveHead").innerHTML=isImg?"<b>在圖片上按右鍵，選「另存圖片」</b>，就能存成透明背景的 PNG（手機請長按圖片）。"
+    :"<b>按「下載 ZIP」</b>。如果按了沒反應，也可以在下面每張圖上按右鍵「另存圖片」（手機請長按）。";
+  const box=$("saveMany");box.innerHTML="";box.hidden=!(many&&many.length);
+  for(const f of many||[]){const u=URL.createObjectURL(f.blob);saveURLs.push(u);
+    const fig=document.createElement("figure"),im=document.createElement("img"),cap=document.createElement("figcaption");
+    im.src=u;im.alt=f.name;cap.textContent=f.name;fig.appendChild(im);fig.appendChild(cap);box.appendChild(fig);}
+  $("saveName").textContent="建議檔名："+name;
+  $("saveBox").hidden=false;$("saveClose").focus();
+}
+function hideSave(){$("saveBox").hidden=true;}
+$("saveClose").addEventListener("click",hideSave);
+$("saveBox").addEventListener("click",e=>{if(e.target===$("saveBox"))hideSave();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("saveBox").hidden)hideSave();});
+const safeName=t=>String(t||"").replace(/[|｜]/g,"_").replace(/[\\/:*?"<>\s]+/g,"_").replace(/^_+|_+$/g,"").slice(0,40);
+function lookName(){if(S.effect==="cal")return "書法字"+(S.cFill==="image"&&calImg?"圖片":(METALS[S.metal]||{}).name);
+  if(S.effect==="puffy"){const k=Object.keys(PUFFY_COLORS).find(k=>{const P=PUFFY_COLORS[k];return P.body===S.pBody&&P.rim===S.pRim&&P.line===S.pLine;});return "膨膨字"+(k?PUFFY_COLORS[k].name:"自訂色");}
+  return (METALS[S.metal]||{}).name;}
+function fileBase(it){it=it||curItem();return (safeName(it.t)||safeName(it.s)||"title")+"_"+lookName();}
+const MODE_TAG={"1080":"_1080","4k":"_4K",crop:"_裁切",crop4k:"_裁切4K"};
+async function renderExport(mode){
+  await ensureFonts();
+  const scale=mode==="4k"||mode==="crop4k"?2:1,ss=scale===2?2:3;
+  const c=document.createElement("canvas");c.width=W*scale;c.height=H*scale;const ctx=c.getContext("2d");
+  const boxes=compose(ctx,scale,ss);let out=c;
+  if((mode==="crop"||mode==="crop4k")&&boxes.length){
+    const p=40*scale;let x1=Math.min(...boxes.map(b=>b.x))-p,y1=Math.min(...boxes.map(b=>b.y))-p,x2=Math.max(...boxes.map(b=>b.x+b.w))+p,y2=Math.max(...boxes.map(b=>b.y+b.h))+p;
+    x1=Math.max(0,x1|0);y1=Math.max(0,y1|0);x2=Math.min(c.width,Math.ceil(x2));y2=Math.min(c.height,Math.ceil(y2));
+    out=document.createElement("canvas");out.width=x2-x1;out.height=y2-y1;out.getContext("2d").drawImage(c,-x1,-y1);}
+  out.oob=boxes.some(b=>b.x<-1||b.y<-1||b.x+b.w>W*scale+1||b.y+b.h>H*scale+1);
+  return out;
+}
+async function deliver(blob,name,many){
+  const dl=downloads||await Promise.race([dlP,new Promise(r=>setTimeout(()=>r(null),1200))]);
+  if(!dl){try{const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),60000);toast("已下載："+name);}catch(e){toast("");showSave(blob,name,many);}return;}
+  try{await dl.save({filename:name,data:blob});toast("已存檔："+name);}
+  catch(e){if(e&&e.code==="declined"){toast("已取消存檔");return;}toast("");showSave(blob,name,many);}
+}
+async function exportPNG(mode){
+  if(!titleLines().length&&!curSub()){toast("還沒有字可以匯出，先在「主標」打字。");return;}
+  toast("產生中…");
+  const out=await renderExport(mode);
+  const name=fileBase()+MODE_TAG[mode]+".png";
+  const blob=await new Promise(r=>out.toBlob(r,"image/png"));
+  await deliver(blob,name);
+}
+$("exp1080").addEventListener("click",()=>exportPNG("1080"));
+$("exp4k").addEventListener("click",()=>exportPNG("4k"));
+$("expCrop").addEventListener("click",()=>exportPNG("crop"));
+$("expCrop4k").addEventListener("click",()=>exportPNG("crop4k"));
+
+/* ---------- every title at once, as one ZIP (stored, no compression: PNG is compressed already) ---------- */
+const CRC=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;})();
+function crc32(u){let c=0xFFFFFFFF;for(let i=0;i<u.length;i++)c=CRC[(c^u[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
+function makeZip(files){
+  const enc=new TextEncoder(),parts=[],cd=[];let off=0;
+  const d=new Date(),dd=((d.getFullYear()-1980)<<9)|((d.getMonth()+1)<<5)|d.getDate(),tt=(d.getHours()<<11)|(d.getMinutes()<<5)|(d.getSeconds()>>1);
+  for(const f of files){
+    const nm=enc.encode(f.name),crc=crc32(f.data),sz=f.data.length;
+    const h=new DataView(new ArrayBuffer(30));
+    h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);h.setUint16(10,tt,true);h.setUint16(12,dd,true);
+    h.setUint32(14,crc,true);h.setUint32(18,sz,true);h.setUint32(22,sz,true);h.setUint16(26,nm.length,true);
+    parts.push(new Uint8Array(h.buffer),nm,f.data);
+    const c=new DataView(new ArrayBuffer(46));
+    c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(8,0x0800,true);c.setUint16(12,tt,true);c.setUint16(14,dd,true);
+    c.setUint32(16,crc,true);c.setUint32(20,sz,true);c.setUint32(24,sz,true);c.setUint16(28,nm.length,true);c.setUint32(42,off,true);
+    cd.push(new Uint8Array(c.buffer),nm);off+=30+nm.length+sz;
+  }
+  let cdn=0;for(const x of cd)cdn+=x.length;
+  const e=new DataView(new ArrayBuffer(22));
+  e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cdn,true);e.setUint32(16,off,true);
+  return new Blob([...parts,...cd,new Uint8Array(e.buffer)],{type:"application/zip"});
+}
+let zipBusy=false;
+async function exportZIP(){
+  const it=itemsAll();
+  if(!it.length){toast("還沒有字可以匯出，先在「主標」打字。");return;}
+  if(zipBusy)return;zipBusy=true;$("expZip").disabled=true;
+  const mode=MODE_TAG[S.zipMode]?S.zipMode:"1080",files=[],oob=[];
+  try{
+    for(let j=0;j<it.length;j++){
+      toast(`產生中 ${j+1} / ${it.length}…`);
+      itemOverride=it[j];
+      const out=await renderExport(mode);
+      if(out.oob)oob.push(j+1);
+      const blob=await new Promise(r=>out.toBlob(r,"image/png"));
+      files.push({name:String(j+1).padStart(2,"0")+"_"+fileBase(it[j])+MODE_TAG[mode]+".png",data:new Uint8Array(await blob.arrayBuffer()),blob});
+      await new Promise(r=>setTimeout(r,0));
+    }
+  }catch(e){console.error(e);toast("打包時出了問題，請再試一次。");return;}
+  finally{itemOverride=null;zipBusy=false;$("expZip").disabled=false;schedule();}
+  const name=`標題${files.length}張_${lookName()}${MODE_TAG[mode]}.zip`;
+  await deliver(makeZip(files),name,files);
+  if(oob.length)toast($("toast").textContent+`　注意：第 ${oob.join("、")} 張有字超出畫面，匯出會被切掉。`);
+}
+$("expZip").addEventListener("click",exportZIP);
+
+/* which title the preview shows: the line the cursor is on, or the one picked below the text boxes */
+function renderItems(){
+  const it=itemsAll(),box=$("items");box.innerHTML="";
+  cur=Math.min(Math.max(0,cur),Math.max(0,it.length-1));
+  $("pg").hidden=it.length<2;$("pg").textContent=it.length>1?`第 ${cur+1} / ${it.length} 張`:"";
+  $("expZip").textContent=`全部打包 ZIP（${it.length} 張）`;
+  $("itemsWrap").hidden=it.length<2;
+  it.forEach((x,j)=>{const b=document.createElement("button");b.className="item";b.type="button";b.setAttribute("aria-pressed",String(j===cur));
+    b.textContent=`${j+1}. ${(x.t||x.s).replace(/[|｜]/g," ")}`;b.title=x.s?`${x.t}／${x.s}`:x.t;
+    b.addEventListener("click",()=>{cur=j;renderItems();schedule();});box.appendChild(b);});
+  for(const id of ["title","sub"]){const el=$(id);if(!el.offsetParent)continue;el.style.height="auto";el.style.height=Math.min(el.scrollHeight+2,260)+"px";}
+}
+function caretItem(el){
+  const raw=el.value.slice(0,el.selectionStart||0).split("\n").length-1,it=itemsAll();
+  let k=0;for(let j=0;j<it.length;j++)if(it[j].i<=raw)k=j;
+  if(k!==cur){cur=k;renderItems();schedule();}
+}
+for(const id of ["title","sub"]){const el=$(id);
+  for(const ev of ["click","keyup","focus"])el.addEventListener(ev,()=>caretItem(el));
+  el.addEventListener("input",()=>{caretItem(el);renderItems();});}
+
+/* test hook: lets an automated check render with given settings and read the pixels back */
+window.__chrome={set(p){if(p.style&&STYLES[p.style])Object.assign(S,STYLES[p.style].set);Object.assign(S,p);syncUI();renderItems();},pick(j){cur=j;renderItems();},
+  async zip(mode){const it=itemsAll(),fs=[];for(const x of it){itemOverride=x;const c=await renderExport(mode||"1080");fs.push({name:fileBase(x)+".png",data:new Uint8Array(await (await new Promise(r=>c.toBlob(r,"image/png"))).arrayBuffer())});}
+    itemOverride=null;const b=makeZip(fs);const u=new Uint8Array(await b.arrayBuffer());let t="";for(let i=0;i<u.length;i+=32768)t+=String.fromCharCode.apply(null,u.subarray(i,i+32768));return btoa(t);},info:()=>lastInfo,async png(mode){const c=await renderExport(mode||"1080");return c.toDataURL("image/png");},ready:()=>fontsReady,state:()=>S,
+  async redraw(){await go(2);return {oob:!$("oob").hidden,miss:$("missWarn").textContent,toast:$("toast").textContent};}};
+
+syncUI();
+renderItems();
+go(2);
+loadBundled().then(()=>{syncUI();go(2);});
+document.fonts.ready.then(()=>schedule());
+})();
+</script>
+
+<p style="text-align:center;font-size:12px;opacity:.6;margin:24px 0">字型以 SIL Open Font License 1.1 授權，主標字型改作自思源黑體（Noto Sans TC）與 WDXL Lubrifont，書法字用莫大毛筆（Bakudai）；<a href="FONT-LICENSES.txt">字型授權</a>・<a href="OFL.txt">OFL 全文</a></p>
+</body></html>
